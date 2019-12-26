@@ -1,7 +1,7 @@
 <template>
     <div class="cart">
       	<!-- 头部组件 -->
-		<TopHeader custom-title="购物车">
+		<TopHeader custom-title="购物车" custom-color="linear-gradient(45deg, #f9ebad, #f4d67b)" custom-border="0">
 			<i slot="rightBtn" class="iconfont icon-lajitong" @click="deletOption()"></i>
 		</TopHeader>
        
@@ -34,7 +34,7 @@
                                 <i class="puls iconfont icon-jia" @click="addNumber(key,item.sku_id)" ></i>
                             </span>
                         </div>
-
+                        <p v-if="item.vip_money" class="vip_money">会员折扣价 <span>￥{{item.vip_money}}</span></p>
                     </div>
 
                 </div>
@@ -142,7 +142,7 @@ export default {
                 else if(res.data.status == 999){
                     this.$store.commit('del_token'); //清除token
                     setTimeout(()=>{
-                        this.$router.push('/Login')
+                        this.$router.push('/Home')
                     },1000)
                 }
                 else{
@@ -166,7 +166,7 @@ export default {
                 else if(res.data.status == 999){
                     this.$store.commit('del_token'); //清除token
                     setTimeout(()=>{
-                        this.$router.push('/Login')
+                        this.$router.push('/Home')
                     },1000)
                 }
                 else{
@@ -195,7 +195,7 @@ export default {
                     this.$store.commit('hideLoading')
                     this.$store.commit('del_token'); //清除token
                     setTimeout(()=>{
-                        this.$router.push('/Login')
+                        this.$router.push('/Home')
                     },1000)
                 }
                 else{
@@ -239,8 +239,9 @@ export default {
             var _that =this
             var data =_that.list[key];
             var val =parseInt(data.goods_num - 1) 
-           if(val<=1){
-               val =1
+           if(val<1){
+               val =1;
+               return this.$toast('商品数量不能小于1!');
            }
            _that._updataGoodsNumber(key,sku_id,val)
         },
@@ -282,7 +283,8 @@ export default {
             }
             _that.$dialog.confirm({
             title: '信息提醒',
-            message: '亲，再考虑考虑吧?'
+            message: '亲，再考虑考虑吧?',
+            confirmButtonText: '删除',
             }).then(() => {
                 let newArry=[];
                 let json=""
@@ -315,7 +317,7 @@ export default {
                         this.$toast(res.data.msg)
                         this.$store.commit('del_token'); //清除token
                         setTimeout(()=>{
-                            this.$router.push('/Login')
+                            this.$router.push('/Home')
                         },1000)
                     }
                     else{
@@ -351,13 +353,14 @@ export default {
 <style lang="stylus" scoped>
     .cart
         width 100%
-        min-height 100%
+        height 100vh
+        background #fef6d7
         color #151515
         .rightBtn
             .icon-lajitong
                 font-size 50px
         .colorRed
-            color #ff112f
+            color #d90000
         .size-35
             font-size 35px
         .size-30
@@ -380,7 +383,7 @@ export default {
                 font-size 50px
                 color #fff
         .conter
-            margin 10px 24px
+            margin 20px 24px
             .c-list-
                 font-family 'SourceHanSansHWSC-Regular'
                 width 100%
@@ -390,19 +393,23 @@ export default {
                 height 238px
                 display flex
                 align-items center
+                background #fff
+                border-radius 20px
                 box-sizing border-box
                 .-list-img
+                    margin-right 40px !important 
                     width 201px
                     height 176px
                     margin 0 10px 0 4px
                     img
-                        max-width 100%
-                        max-height 100%
+                        width 100%
+                        height 100%
+                        border-radius 10px
                 .goods-info
                     width:445px
                     .-info-msg
                         width 100%
-                        height 80px
+                        height 100px
                         font-size 24px
                         color #151515
                         overflow hidden
@@ -413,20 +420,25 @@ export default {
                         margin-bottom 10px
                         word-break break-all
                         .spec-names
-                            color:#888
-                            margin-top 7px
+                            margin-top 15px
+                            max-width 350px
+                            display inline-block
+                            padding 5px 10px
+                            border-radius 15px
+                            color:#fff
+                            background #a6894f
                     .-info-option
                         display flex
                         justify-content space-between
                         align-items center
                         .price
-                            color #ff112f
+                            color #d90000
                             font-size 20px
                             strong
                                 font-size 30px
                         .-option-
                             border 2px solid #e6e6e6
-                            width 200px
+                            width 136   px
                             height 40px
                             line-height 40px
                             display flex
@@ -444,11 +456,15 @@ export default {
                                 border-right 1px solid #e6e6e6
                                 
                             .inp
-                                width 121px
+                                width 76px
                                 text-align center
                                 height inherit
                                 font-size 24px
                                 font-weight bold
+                    .vip_money
+                        span 
+                            color #d90000
+                            font-size 20px
         .footer-height
             width 100%
             height 220px
@@ -482,8 +498,8 @@ export default {
 <style lang="stylus">
     .cart
         .van-checkbox__icon--checked .van-icon
-            background-color #e359c2
-            border-color #e052c7
+            background-color #d90000
+            border-color #d90000
     .van-checkbox__icon
         margin 0 5px 0 0         
 </style>

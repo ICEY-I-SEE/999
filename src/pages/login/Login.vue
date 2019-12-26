@@ -50,7 +50,7 @@
                 <!-- <div class="global-option-btn global-option-style"  @click="saveUserInfo(true)">游客浏览</div> -->
 
             </div>
-            <!-- <router-link to="/Register" class="global-cont-2"><span class="color-ff">还没有日日领账号？立即注册</span></router-link> -->
+            <!-- <router-link to="/Register" class="global-cont-2"><span class="color-ff">还没有玖酒久账号？立即注册</span></router-link> -->
         </div>
     </div>
 </template>
@@ -84,10 +84,78 @@ export default {
         if(this.$store.getters.optuser.Authorization){       //返回登录页 如果有token 就返回首页
             this.$router.push('/Home')
         }
+        let code = this.getCode('code');
+        let user_id = this.getCode('user_id');
+        if(code){
+            let url = 'weixin/get_openid'
+                this.$axios.post(url,{
+                    'code':code,
+                    'user_id':user_id?user_id:'0'
+                })
+            .then((res)=>{
+                let _that = this;
+                if(res.data.status==200){
+                    _that.$toast({message:"登录成功,正在跳转...",duration:1000})
+                    localStorage.removeItem('Authorization');
+                    var tokens = res.data.data.token
+                    _that.$store.commit('set_token',{Authorization: tokens})  //保存token
+                    setTimeout(()=>{
+                        // if(localStorage.getItem('details_url')){
+                        //     _that.$router.push(localStorage.getItem('details_url'))
+                        // }else{
+                        //     _that.$router.push('/Home?is_pwd='+res.data.data.is_pwd+'&is_reads='+res.data.data.is_reads+'&is_vip_free_read='+res.data.data.is_vip_free_read)
+                        // }
+                        _that.$router.push('/Home')
+                    },1000)
+                }else{
+                    console.log('----+++++---')                    
+                    console.log(res.data)
+                    console.log(res.data.status)
+                    console.log('----+++++---')
+                    this.$toast(res.data.msg)
+                }
+            })
+            .catch((error) => {
+                console.log('请求错误:'+ error)
+            }) 
+        }else{
+            this.getIsWxClient();
+        }
         this.getlocalStorage()
         
     },
     methods:{
+        /**
+         * 判断是否是微信环境
+         */
+        getIsWxClient () {
+            var ua = navigator.userAgent.toLowerCase(),
+                that = this;
+            let user_id = this.getCode('user_id');
+            if (ua.match(/MicroMessenger/i) == "micromessenger") {
+                that.$axios.post('weixin/info_code',{
+                    'user_id':user_id?user_id:'0'
+                })
+                .then((res)=>{
+                    var list=res.data;
+                    console.log(list)
+                    if(list.status==200){
+                        window.location.href = list.data;
+                    }else{
+                        that.$toast(list.msg)
+                    }
+                })
+                .catch((error) => {
+                    alert('请求错误:'+ error)
+                }) 
+            }
+            return false;
+        },
+        getCode (name) {
+            var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return decodeURIComponent(r[2]); return null;
+        },
         handelSigninTypes(index){
             this.signinTypes = index;
         },
@@ -123,7 +191,6 @@ export default {
                     localStorage.removeItem('Authorization');
                     var tokens = list.data.token
                     _that.$store.commit('set_token',{Authorization: tokens})  //保存token
-                    _that.$store.commit('set_wx',list.data.is_wx)
                     setTimeout(()=>{
                         if(localStorage.getItem('details_url')){
                             _that.$router.push(localStorage.getItem('details_url'))

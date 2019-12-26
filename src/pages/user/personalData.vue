@@ -25,25 +25,33 @@
                         </div>
                     </div>
                 </router-link> -->
-                <router-link class="my_look" to="/user/setUpPassword">
+                <!-- <router-link class="my_look" to="/user/setUpPassword" v-if="!wx">
                     <div class="item_wrap">
                         <div class="text">重置密码</div>
                         <div class="name_wrap">
                             <i class="iconfont icon-xiangyoujiantou"></i>
                         </div>
                     </div>
-                </router-link>    
-                 <router-link class="my_look" to="/user/SetPassword">
+                </router-link> -->
+                <router-link class="my_look" :to="userName.pwd_type!=1?'/user/SetPassword':'/user/SetPassword?pwd_type=1'">
                     <div class="item_wrap">
                         <div class="text">支付密码</div>
                         <div class="name_wrap">
                             <i class="iconfont icon-xiangyoujiantou"></i>
                         </div>
                     </div>
-                </router-link>    
+                </router-link>
+                <router-link class="my_look" :to="userName.mobile_type!=1?'/user/SetPhone':'/user/SetPhone?mobile_type=1'">
+                    <div class="item_wrap">
+                        <div class="text">{{userName.mobile_type!=1?'设置手机号码':'修改手机号码'}}</div>
+                        <div class="name_wrap">
+                            <i class="iconfont icon-xiangyoujiantou"></i>
+                        </div>
+                    </div>
+                </router-link>
             </div>
             <!-- 按钮 -->
-            <div class="btn ts-style" @click="quitOut()"><span class="ts-btn-msg">退出登录</span></div>
+            <!-- <div class="btn ts-style" @click="quitOut()"><span class="ts-btn-msg">退出登录</span></div> -->
 		</div>
 	</div>
 </template>
@@ -57,11 +65,16 @@
 		data() {
 			return{
                 userImg:'',// 用户头像
-                userName:''// 用户名
+                userName:'',// 用户名
+                wx:false
 			}
         },
         created() {
             this.Name();// 用户名
+            var ua = navigator.userAgent.toLowerCase();
+            if (ua.match(/MicroMessenger/i) == "micromessenger") {
+                this.wx = true;
+            }
         },
         methods:{
             onRead(file) {
@@ -149,7 +162,8 @@
 <style lang="stylus" scoped>
     .data_wrap
         width 100%
-        height 100%
+        height 100vh
+        background #fef6d7
         .content
             .nom_wrap
                 margin 26px 24px
@@ -167,9 +181,9 @@
                     display inline-block
                     vertical-align middle
                 .text
-                    width 130px
+                    width 200px
                     font-size 30px
-                    text-align-last justify
+                    letter-spacing 2px
                 .name_wrap
                     font-size 30px
                     float right

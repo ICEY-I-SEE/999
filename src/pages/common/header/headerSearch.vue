@@ -2,11 +2,11 @@
     <div>
         <van-sticky class="sticky"  :z-index="999">
             <div class="f-title-wrap">
-                <van-icon size="24" name="arrow-left" class='goBackClass' @click="backAction" />
+                <van-icon size="24" name="arrow-left" color="#000" class='goBackClass' @click="backAction" />
                 <form action="/" >
                     <van-search
                         shape='round'
-                        background='#F18BF8'
+                        background='linear-gradient(90deg,#f9ebad,#efd984)'
                         v-model="value"
                         placeholder="请输入搜索关键词"
                         @click="sstd"
@@ -45,11 +45,19 @@ export default {
 }
 </script>
 
+<style lang="stylus">
+>>> .TopHeader{
+    border: 0;
+    width 100%
+    height 200px;
+    background: red;
+}
+</style>
 <style scoped>
 .f-title-wrap{
     padding:0 24px;
     display: flex;
-    background: #F18BF8;
+    background: linear-gradient(90deg,#f9ebad,#efd984);
     align-items: center;
     justify-content: space-between
 }
@@ -64,8 +72,7 @@ form{
     color: white;
 }
 .logo{
-    width: 52px;
-    height:52px;
+    width: 46px;
     display: block; 
 }
 .sticky{
@@ -74,6 +81,4 @@ form{
     top: 0;
     z-index: 999;
 }
-
-    
 </style>

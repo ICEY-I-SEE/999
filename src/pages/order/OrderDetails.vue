@@ -60,7 +60,7 @@
                     <div class="fl">收货人</div>
                     <div class="fr">{{orderDetails.consignee}} {{orderDetails.mobile}}</div>
                 </div>
-                <div class="group-line">
+                <div class="group-line" v-if="orderDetails.pay_status==1">
                     <div class="fl">支付方式</div>
                     <div class="fr">{{pay_name}}</div>
                 </div>
@@ -127,7 +127,8 @@ export default {
     },
     methods:{
         JumpTo(){
-            this.$router.push('/User')
+            this.$router.go(-1)
+            // this.$router.push('/User')
         },
         requestData(){
             let url = 'Order/order_detail';
@@ -144,7 +145,7 @@ export default {
                 else if(res.data.status == 999){
 					this.$store.commit('del_token'); //清除token
 					setTimeout(()=>{
-						this.$router.push('/Login')
+						this.$router.push('/Home')
 					},1000)
 				}
                 else{
@@ -219,9 +220,10 @@ export default {
             text-overflow ellipsis
     .content
         padding 120px 24px 0
+        background #fef6d7
         box-sizing border-box
         .goods-list
-            background-color #fff
+            background-color #fef6d7
             border-radius 10px
             margin-bottom 10px
             .single-item
@@ -270,7 +272,7 @@ export default {
                                 color #151515
         .group-wrap
             width 100%
-            background-color #fff
+            background-color #fef6d7
             border-radius 10px
             margin-bottom 10px
             padding 14px 14px 2px 
@@ -308,7 +310,7 @@ export default {
             font-size 30px
             background-color #f70a0a
             float right 
-            background: #df51c8;
+            background: #e63100;
             letter-spacing: 0.04rem;
             font-family: 'PangMenZhengDao'
 

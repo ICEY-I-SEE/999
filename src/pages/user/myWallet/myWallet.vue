@@ -172,7 +172,7 @@
                         that.$store.commit('hideLoading')   //数据成功获取后关闭loading
                         that.$store.commit('del_token');    //清除token
                         setTimeout(()=>{
-                            this.$router.push('/Login')
+                            this.$router.push('/Home')
                         },1000)
                     }else{
                         that.$toast(res.data.msg)
@@ -193,7 +193,7 @@
                     else if(res.data.status == 999){
                         that.$store.commit('del_token'); //清除token
                         setTimeout(()=>{
-                            this.$router.push('/Login')
+                            this.$router.push('/Home')
                         },1000)
                     }else{
                         that.$toast(res.data.msg)

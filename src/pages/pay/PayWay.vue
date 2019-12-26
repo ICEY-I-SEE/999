@@ -14,7 +14,7 @@
                 <van-radio-group v-model="payDefault">
                     <van-cell-group>
                         <van-cell v-for="(item,index) in payType" :key="index" :title="item.pay_name" clickable @click="selectPay(item)">
-                            <van-radio :name="item.pay_name"/>
+                            <van-radio checked-color="#d90000" :name="item.pay_name"/>
                         </van-cell>
                     </van-cell-group>    
                 </van-radio-group>
@@ -22,6 +22,14 @@
             <div class="pay-price">
                 <span>支付金额</span>
                 <span class="pay-price-red">￥{{(goodsPrice=="" || typeof(goodsPrice)=='undefined') ? '0.0' : goodsPrice}}</span>
+            </div>
+            <div class="pay-tips">
+                <van-checkbox v-model="checked" checked-color="#d90000">
+                    我已同意
+                    <router-link class="link" to="/Pay/PayText">
+                        《XXXX》
+                    </router-link>
+                </van-checkbox>
             </div>
             <!-- 优惠券 -->
             <!--<div class="row-line" v-if="(typeof(this.isCard)!='undefined') || (typeof(this.cardType)!='undefined')">
@@ -61,7 +69,7 @@
             </div>-->
 
         </div>
-        <div class="payment-btn ts-style" @click="payment(order_id,pay_id)">立即付款</div>
+        <div class="payment-btn ts-style" :class="!checked?'payment-bg':''" @click="payment(order_id,pay_id)">立即付款</div>
         <!-- 数字键盘 -->
         <div v-show="paswPopup" class="pasw-popup">
             <div class="popup-inner" @click="paswPopup= false"></div>
@@ -96,15 +104,16 @@
 </template>
 <script>
 import wx from "weixin-js-sdk";
+import { Dialog } from 'vant';
 export default {
     name:'PayWay',
     data() {
         return {
             wxHj:0,
-            payDefault:'微信支付',
+            payDefault:'',
             isClick:false,
             order_id:this.$route.query.order_id,
-            pay_id:2,            //支付方式id
+            pay_id:'',            //支付方式id
             pay_type:[],        //所有支付方式
             payPassword:'',     //支付密码
             showPwd:false,
@@ -128,7 +137,8 @@ export default {
             isReissue:this.$route.query.isReissue,  //是否是补卡支付
             goodsPrice:this.$route.query.price,
             idError:false, //9001,9002,9003
-            errorText:'' //错误信息
+            errorText:'', //错误信息
+            checked:false
         }
     },
     created(){
@@ -137,7 +147,7 @@ export default {
         if(typeof(this.goodsId)!='undefined'){
             this.tag = 1
         }
-        this.reqCashCoupon()
+        // this.reqCashCoupon()
         console.log(this.goodsPrice)
 
         var ua = navigator.userAgent.toLowerCase();
@@ -251,7 +261,7 @@ export default {
                 else if(res.data.status == 999){
 					this.$store.commit('del_token'); //清除token
 					setTimeout(()=>{
-						this.$router.push('/Login')
+						this.$router.push('/Home')
                     },1000)
                     this.$store.commit('hideLoading')       //加载loading
                 }
@@ -266,11 +276,20 @@ export default {
         selectPay(item){
             this.payDefault = item.pay_name;//当前选中
             this.pay_id = item.pay_type;//当前选中支付方式id
+            if(this.$route.query.pwd==0&&this.pay_id==1){
+                this.$toast('请设置支付密码!')
+                setTimeout(()=>{
+                    this.$router.push({name:'SetPassword',query:{order_id:this.$route.query.order_id,price:this.$route.query.price}})
+                },1000)
+                return false;
+            }
         },
 
         payment(){
 
             var pay_id=this.pay_id
+            if(pay_id == '') return this.$toast('请选择支付方式!');
+            if(!this.checked) return this.$toast('请选择勾选支付协议!');
             if(pay_id == 1){
                 this.showPwd = true;
                 this.showKeyboard = true;
@@ -326,6 +345,7 @@ export default {
             // })
         },
         onBridgeReady(params) {
+            let that = this;
             WeixinJSBridge.invoke(
                 'getBrandWCPayRequest', {
                     "appId": params.appId,  //公众号名称，由商户传入     
@@ -338,6 +358,9 @@ export default {
                 function(res){
                     if(res.err_msg == "get_brand_wcpay_request:ok" ){
                         alert('支付成功！');
+                        if(that.order_id){
+                            that.$router.push('/Order?type=0')
+                        }
                     }
                 }
             ); 
@@ -455,7 +478,8 @@ export default {
                 return
             }
             this.isClick=true
-            let url = 'pay/recharge_pay';
+            let url = 'pay/recharge_pay',
+                that = this;
             this.$axios.post(url,{
                 token:this.$store.getters.optuser.Authorization,
                 pay_type:this.pay_id,
@@ -465,6 +489,11 @@ export default {
             })
             .then((res) => {
                 // console.log(res)
+                if(res.data.status == 200){
+                    if(this.wxHj == 1 && this.pay_id == 2){
+                        that.wxpay(res.data.data.url);
+                    }
+                }
                 if(res.data.status == 311){
                     if(this.wxHj == 1 && this.pay_id == 2){
                         that.wxpay(res.data.data.pay_data);
@@ -514,7 +543,8 @@ export default {
                                 this.$router.push('/Order/OrderDetails?order_id=' + res.data.data.order_id)
                             },2000)
                         }
-                    } 
+                    }
+                    if(this.pay_id==2) this.wxpay(res.data.data.url);
                 } 
                 else if(res.data.status == 311){
                     if(this.wxHj == 1 && this.pay_id == 2){
@@ -525,7 +555,15 @@ export default {
                     
                 }
                 else if(res.data.status == 308){
-                    return this.$router.push('/user/myWallet/Recharge')
+                    Dialog.confirm({
+                        title: '余额不足!',
+                        message: '是否前往充值?'
+                    }).then(() => {
+                        // on confirm
+                        return this.$router.push('/user/myWallet/Recharge')
+                    }).catch(() => {
+                        // on cancel
+                    });
                 }  
                 else if(res.data.status === 888){
                     // 设置支付密码
@@ -534,7 +572,7 @@ export default {
                 }else if(res.data.status == 999){               // token过期
                     this.$store.commit('del_token');              //清除token
                     setTimeout(()=>{
-                        this.$router.push('/Login')
+                        this.$router.push('/Home')
                     },1000)
                 }
                 else if(res.data.status == 9001 || res.data.status ==9002 || res.data.status ==9003){
@@ -549,7 +587,6 @@ export default {
             })
             .catch((error) => {
                 that.$toast('请求错误')
-                console.lohg("1")
                 that.isClick=false
             })
         },
@@ -559,14 +596,15 @@ export default {
                 if(typeof(this.order_id)!='undefined'){      // 普通支付
                     this.requestInfo()
                 }
-                
-                if(typeof(this.isCard)!='undefined'){      // 购买会员卡
+                else if(typeof(this.isCard)!='undefined'){      // 购买会员卡
                     this.payMemberCard()
                 }
-               
-                if(typeof(this.cardNum) !='undefined'){      // 立即补卡
+                else if(typeof(this.cardNum) !='undefined'){      // 立即补卡
                     this.reissueCard()
+                }else{
+                    this.$toast('请使用其它方式支付!')
                 }
+                
                 // 关闭密码输入
                 this.showKeyboard = false
                 this.showPwd = false
@@ -671,6 +709,11 @@ export default {
             justify-content space-between
             .pay-price-red
                 color #ff2d10
+        .pay-tips
+            margin 10px 24px
+            .link
+                color #ff2d10
+                text-decoration underline
         .pay-way /deep/ .van-cell__value
             flex none
         .row-line /deep/ .van-hairline--top-bottom::after
@@ -778,6 +821,9 @@ export default {
         bottom 50px
         margin-left -35%
         z-index 9
+    .payment-bg
+        pointer-events none
+        background #ccc
     .pasw-popup
         position fixed
         width 100%

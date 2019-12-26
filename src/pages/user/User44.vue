@@ -197,7 +197,7 @@
                     }
                     else if(res.data.status === 999){
                         this.$store.commit('del_token'); //清除token;
-                        this.$router.push('/Login')
+                        this.$router.push('/Home')
                     }
                     else{
                         this.$toast(res.data.msg)

@@ -15,10 +15,10 @@
                 </div>
             </div> -->
 
-            <div class="query">
+            <!-- <div class="query">
                 <van-icon name="search" size="16" color="BABDBB" />
                 <input class="in-query" type="text" v-model="queryVal" placeholder="请输入用户ID或昵称查询">
-            </div>
+            </div> -->
 
             <van-loading color="#F18BF8" v-show="isQuery"/>
 
@@ -41,7 +41,7 @@
                             </p>
                             <!-- <p class="level-name">{{item.level_name}}
                             </p> -->
-                            <p class="level-name">{{item.leader}}</p>
+                            <!-- <p class="level-name">{{item.leader}}</p> -->
                             <button class="give_btn" v-if="item.level==0 && item.is_vip_free==0 && type==2" @click="giveUser(item.id)">赠送会员体验卡</button>
                             <button class="give_btn" v-if="item.is_vip_free==1 && type==2">会员体验用户</button>
                             <!-- <p class="level-sds">会员卡数量：{{item.card_num}}</p> -->
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-    import TeamHeader from "@/pages/common/header/TopHeaderNew"
+    import TeamHeader from "@/pages/common/header/TopHeader"
     import Navigate from "@/pages/common/footer/Navigate"
     export default {
     name: "myTeam",
@@ -73,14 +73,28 @@
 	},
 	data() {
 		return {
-            customTitle:this.$route.query.tit,
+            customTitle:'',
             teamList:[],
             type:this.$route.query.type,
             queryVal:'',
-            isQuery:false
+            isQuery:false,
         };
     },
     created(){
+        switch(this.type){
+            case '1':
+                this.customTitle = '游客列表'
+                break;
+            case '2':
+                this.customTitle = '酒仙列表'
+                break;
+            case '3':
+                this.customTitle = '酒神列表'
+                break;
+            case '4':
+                this.customTitle = '酒祖列表'
+                break;
+        }
         this.$store.commit('showLoading')
         this.getTeamInfo();
     },
@@ -95,7 +109,7 @@
     },
     methods:{
         giveUser(user_id){
-            let url = 'user/is_vip_free',_that=this;
+            let url = 'user/team_info',_that=this;
              _that.$axios.post(url,{
                 token:this.$store.getters.optuser.Authorization,
                 user_id:user_id
@@ -113,15 +127,30 @@
 
         },
         teamDetails(id){
+            return false;
             this.$router.push('/user/TeamDetails?id='+id)
         },
         getTeamInfo(queryVal){
             let _that=this,
-                url = 'user/team_list';
+                url = 'user/team_info',
+                type_name = '';
+            switch(this.type){
+                case '1':
+                    type_name = 'vip'
+                    break;
+                case '2':
+                    type_name = 'vip_999'
+                    break;
+                case '3':
+                    type_name = 'svip_1'
+                    break;
+                case '4':
+                    type_name = 'svip_2'
+                    break;
+            }
             _that.$axios.post(url,{
                 token:this.$store.getters.optuser.Authorization,
-                type:Number(this.type),
-                kw:queryVal
+                type_name:type_name
             }).then((res)=>{
                 var list =res.data
                 if(list.status===200){
@@ -131,7 +160,7 @@
                 }
                 else if(res.data.status === 999){
                     this.$store.commit('del_token'); //清除token;
-                    this.$router.push('/Login')
+                    this.$router.push('/Home')
                 }
                 else{
                     _that.$toast(list.msg)
@@ -171,7 +200,7 @@
     .MyTeam
         width 100%
         min-height 100vh
-        background linear-gradient(#f1f1f1, #dfe1f3)
+        background #fef6d7
         .TopHeader
             .iconfont
                 font-size 45px
@@ -243,14 +272,14 @@
                             span
                                 display block
                         .user-id
-                            width 144px
+                            width 200px
                             height 50px
                             text-align center
                             font-size 18px
                             margin-bottom 10px
                             color #ffffff
                             border-radius 18px
-                            background linear-gradient(to right,#fa8cfa 0%,#4778fe 100%)
+                            background linear-gradient(to right,#e63100 0%,#d90000 100%)
                             background-size 100%
                             letter-spacing 1px
                             box-shadow 0px 10px 10px #f3d6ee
@@ -266,7 +295,7 @@
                             font-size 16px
                             color #ffffff
                             border-radius 18px
-                            background linear-gradient(to right,#fa8cfa 0%,#4778fe 100%)
+                            background linear-gradient(to right,#e63100 0%,#d90000 100%)
                             background-size 100%
                             letter-spacing 1px
                             box-shadow 0px 10px 10px #f3d6ee

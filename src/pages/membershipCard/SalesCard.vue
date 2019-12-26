@@ -55,7 +55,7 @@ export default {
                 else if(res.data.status == 999){
                     _that.$store.commit('del_token'); //清除token
                     setTimeout(() => {
-                        _that.$router.push('/Login')
+                        _that.$router.push('/Home')
                     },1000)
                 }
                 else{

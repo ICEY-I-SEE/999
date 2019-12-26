@@ -1,14 +1,14 @@
 <template>
     <div class="noticeList">
         <!-- 头部组件 -->
-		<TopHeader custom-title="公告列表">
+		<TopHeader custom-title="资讯列表">
 			<i slot="backBtn" class="iconfont icon-fanhui"></i>
 		</TopHeader>
         <div class="content">
             <div class="notice-list">
                 <ul>
                     <router-link :to="'/notice/NoticeDetails?item_id='+item.id" tag="li" v-for="(item,index) in NotList" :key="index">
-                        <h3>{{item.title}}</h3>
+                        <h3 class="publicEllipsis"><img src="/static/images/user/notice.png"> {{item.title}}</h3>
                         <span class="date">{{item.create_time | formatDate}}</span>
                     </router-link>
                 </ul>
@@ -79,7 +79,8 @@ export default {
 
 <style lang="stylus" scoped>
 .noticeList
-    background-color #fff
+    background-color #fef6d7
+    padding-bottom 20px
     min-height 100vh
     .content
         padding-top 30px
@@ -87,20 +88,26 @@ export default {
         .notice-list
             ul
                 li
+                    margin-bottom 20px
                     padding 10px 30px
                     font-size 28px
                     line-height 50px
-                    border-bottom 1px solid #efefef
                     box-sizing border-box
+                    background #fff
+                    display flex
+                    justify-content space-between
                     h3
-                        display -webkit-box
-                        overflow hidden
-                        -webkit-line-clamp 2
-                        -webkit-box-orient vertical
+                        width 70%
                         font-weight normal
+                        img
+                            margin-right 20px
+                            vertical-align text-top
+                            width 40px
+                            height 40px
                     .date
                         display block
-                        color #999999
+                        width  30%
+                        color #a4a4a4
                         font-size 24px
                         text-align right 
 

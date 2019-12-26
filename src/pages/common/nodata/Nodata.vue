@@ -34,7 +34,7 @@
 }
     .nodata-wrap
         text-align :center
-        background: #eee;
+        background: #fef6d7;
         min-height: 93vh;
         .zanwu
             font-size: 30px;

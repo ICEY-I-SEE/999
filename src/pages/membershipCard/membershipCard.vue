@@ -22,12 +22,12 @@
                 </div>
                 <div class="total-wrap">
                     <div class="desc">
-                        <p class="title">日日领会员权益：</p>
-                        <p><span class="akey">日日领会员制商城</span>，只有本商城的<span class="akey">VIP会员</span>才可以在商城内持续低价购买和领取商品。</p>
-                        <p><span class="akey">日日领，致力于成为中国人自己的会员制商城。尽可能以最低的价格为会员提供一切高品质的商品，为您实现消费降级，品质升级。</span></p>
+                        <p class="title">玖酒久会员权益：</p>
+                        <p><span class="akey">玖酒久会员制商城</span>，只有本商城的<span class="akey">VIP会员</span>才可以在商城内持续低价购买和领取商品。</p>
+                        <p><span class="akey">玖酒久，致力于成为中国人自己的会员制商城。尽可能以最低的价格为会员提供一切高品质的商品，为您实现消费降级，品质升级。</span></p>
                         <p>商城的新用户可以在<span class="akey">【每日一领 免费专区】</span>体验领取一次会员免费商品，但无法购买商城会员价商品。成为会员后即可持续享受商城会员全网最低价，同时可在<span class="akey">【每日一领】</span>专区每天任意领取一款会员免费商品，更有无数大牌好物惊爆价为会员准备。</p>
-                        <p>按商城会员用户日常消费计算，每<span class="akey">1000元</span>，日日领会员可在商城购买市场价<span class="akey">8000元-10000元</span>总额的商品。按商城会员用户免费领取计算，每月可累计为您节省日常生活花销<span class="akey">1000元-2000元</span>。</p>
-                        <p>日日领会员制商城目前为邀请制，只有通过会员之间分享的二维码才能注册登录。当您成为日日领<span class="akey">VIP会员</span>后，您可在<span class="akey">【个人中心】</span>点击<span class="akey">【我要分享】</span>获取您的会员专属二维码，将二维码分享给新用户，即可帮他完成注册登录，为他一同实现消费降级，品质升级。</p>
+                        <p>按商城会员用户日常消费计算，每<span class="akey">1000元</span>，玖酒久会员可在商城购买市场价<span class="akey">8000元-10000元</span>总额的商品。按商城会员用户免费领取计算，每月可累计为您节省日常生活花销<span class="akey">1000元-2000元</span>。</p>
+                        <p>玖酒久会员制商城目前为邀请制，只有通过会员之间分享的二维码才能注册登录。当您成为玖酒久<span class="akey">VIP会员</span>后，您可在<span class="akey">【个人中心】</span>点击<span class="akey">【我要分享】</span>获取您的会员专属二维码，将二维码分享给新用户，即可帮他完成注册登录，为他一同实现消费降级，品质升级。</p>
                     </div>
                     <!-- <p class="total-msg">VIP会员优惠价</p>
                     <p class="total-msg">购买后将升级为<strong>VIP</strong>会员</p>
@@ -91,7 +91,7 @@ export default {
                 else if(res.data.status == 999){
                     _that.$store.commit('del_token'); //清除token
                     setTimeout(() => {
-                        _that.$router.push('/Login')
+                        _that.$router.push('/Home')
                     },1000)
                 }
                 else{

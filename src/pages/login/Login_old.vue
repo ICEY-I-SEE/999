@@ -32,7 +32,7 @@
                 </div>    
 
             </div>
-            <router-link to="/Register" class="global-cont-2"><span class="color-ff">还没有日日领账号？立即注册</span></router-link>
+            <router-link to="/Register" class="global-cont-2"><span class="color-ff">还没有玖酒久账号？立即注册</span></router-link>
         </div>
     </div>
 </template>

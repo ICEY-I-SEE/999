@@ -53,7 +53,7 @@ export default {
                     this.$toast(res.data.msg)
                     this.$store.commit('del_token'); //清除token;
                         setTimeout(()=>{
-                            this.$router.push('/Login')
+                            this.$router.push('/Home')
                     },1000)
                 }
                 else{

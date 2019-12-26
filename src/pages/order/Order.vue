@@ -135,7 +135,7 @@
                 <!-- 无数据 -->
                 <div class="none" v-show="allOrders.length == 0">
                     <img src="/static/images/public/none-icon.png"/>
-                    <p class="dian"><img src="/static/images/public/dot-icon.png" alt=""><span>您还没相关订单</span><img src="/static/images/public/dot-icon.png" alt=""></p>
+                    <p class="dian"><span>亲！您还没有此类订单哦~~</span></p>
                 </div>
             </div>
 
@@ -269,7 +269,7 @@ export default {
                     }else if(res.data.status == 999){
                         this.$store.commit('del_token'); //清除token
                         setTimeout(()=>{
-                            this.$router.push('/Login')
+                            this.$router.push('/Home')
                         },1000)
                     }else{
                         this.$toast(res.data.msg)
@@ -305,7 +305,7 @@ export default {
                         this.$toast(res.data.msg)
                         this.$store.commit('del_token'); //清除token
                         setTimeout(()=>{
-                            this.$router.push('/Login')
+                            this.$router.push('/Home')
                         },1000)
                     }
                     else{
@@ -361,7 +361,7 @@ export default {
                         this.$toast(res.data.msg)
                         this.$store.commit('del_token'); //清除token
                         setTimeout(()=>{
-                            this.$router.push('/Login')
+                            this.$router.push('/Home')
                         },1000)
                     }
                     else{
@@ -476,8 +476,8 @@ export default {
 .color-8
     color:#888
 .Order
-    // height 100%
-    background linear-gradient(#f1f1f1, #dfe1f3)
+    min-height 100vh
+    background #fef6d7
     font-family: 'SourceHanSansHWSC-Regular'
     .TopHeader
         width 100%
@@ -492,12 +492,14 @@ export default {
         font-family "PangMenZhengDao"
         letter-spacing 4px
         .TopHeader-inner
-            height 150px
-            line-height 150px
-            background-image linear-gradient(90deg,#fc8cfa 0%,  #a281ed 47%, #737cf6 68%, #4377ff 100%)
-            box-shadow 0px 21px 58px 10px rgba(134, 126, 240, 0.63)
+            height 88px
+            line-height 88px
+            background #fff
+            // background-image linear-gradient(90deg,#fc8cfa 0%,  #a281ed 47%, #737cf6 68%, #4377ff 100%)
+            // box-shadow 0px 21px 58px 10px rgba(134, 126, 240, 0.63)
             width 100%
-            color #fff
+            color #000
+            font-weight bold
             letter-spacing 4px
             .topheader-msg
                 display inline-block
@@ -513,8 +515,7 @@ export default {
             margin auto
             .tab-tit-inner
                 background #fff
-                padding 36px 0 0
-                box-shadow 0px 10px 15px 6px rgba(96, 113, 186, 0.1)
+                // box-shadow 0px 10px 15px 6px rgba(96, 113, 186, 0.1)
                 border-bottom-left-radius 32px
                 border-bottom-right-radius 32px
             ul
@@ -527,7 +528,7 @@ export default {
                 padding 24px 24px 0
                 box-sizing border-box
                 margin-bottom 20px
-                box-shadow 0px 10px 15px 6px rgba(96, 113, 186, 0.3)
+                // box-shadow 0px 10px 15px 6px rgba(96, 113, 186, 0.3)
                 border-bottom-left-radius 32px
                 border-bottom-right-radius 32px
                 li
@@ -545,8 +546,8 @@ export default {
                         background url('/static/images/order/or_1.png') no-repeat
                         background-size 100% 100%
                     .tit-icon-1
-                        background url('/static/images/order/or_2.png') no-repeat
-                        background-size 100% 100%
+                        background url('/static/images/order/or_2.png') no-repeat 0 3px
+                        background-size 100% 90%
                      .tit-icon-2
                         background url('/static/images/order/or_3.png') no-repeat
                         background-size 100% 100%
@@ -558,7 +559,7 @@ export default {
                         background-size 100% 100%
                     &.active
                         .active-icon
-                            background #d655bc
+                            background #d90000
                             border-bottom-left-radius 6px
                             border-bottom-right-radius 6px
                             position: absolute
@@ -570,9 +571,7 @@ export default {
                         // color #f11010
             // font-size 36px  
     .tab-wrap
-        padding-top 350px
-        min-height 100vh
-        background linear-gradient(#f1f1f1, #dfe1f3)
+        padding-top 260px
         .tr
             text-align: right
         .color-8
@@ -598,10 +597,10 @@ export default {
                     box-sizing border-box
                     .order-date
                         font-size 20px
-                        color #d758ba
+                        color #000
                     .order-state
                         font-size 20px
-                        color #d758ba
+                        color #000
                         position relative
                         display flex
                         align-items center
@@ -694,7 +693,7 @@ export default {
                         // width 144px
                         height 49px
                         line-height 49px
-                        background-color #ebe9f3
+                        background-color #f8f8f8
                         border-radius 25px
                         font-size 26px
                         letter-spacing 3px
@@ -707,8 +706,8 @@ export default {
                         &.red
                             color #fff
                             // border-color #f20c0c
-                            background-image: linear-gradient(90deg, #fc8cfa 0%, #a281ed 59%, #737cf6 84%, #4377ff 100%);
-                            box-shadow: 0px 21px 38px 0px rgba(203, 74, 179, 0.36);
+                            background-color: #e32600;
+                            box-shadow: 0px 5px 10px 0px #e32600;
                             a
                                 color #fff
             .fifty_wrap

@@ -7,7 +7,7 @@
 		</Data-Header>
         <div class="content">
 			<div class="nom_wrap">
-                <p class="exp-style">完善资料填写，即可获得一张5元代金券</p>
+                <!-- <p class="exp-style">完善资料填写，即可获得一张5元代金券</p> -->
                 <div class="item_wrap">
                     <div class="text">头像</div>
                     <van-uploader :after-read="onRead">    
@@ -25,7 +25,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="my_look">
+                <!-- <div class="my_look">
                     <div class="item_wrap">
                         <div class="text">性别</div>
                         <div class="name_wrap">
@@ -35,8 +35,8 @@
                             </van-radio-group>
                         </div>
                     </div>
-                </div>
-                <div class="my_look">
+                </div> -->
+                <!-- <div class="my_look">
                     <div class="item_wrap">
                         <div class="text">所在城市</div>
                         <div class="name_wrap">
@@ -47,21 +47,21 @@
                             <i class="iconfont icon-xiangyoujiantou"></i>
                         </div>
                     </div>
-                </div>
-                <div class="my_look">
+                </div> -->
+                <!-- <div class="my_look">
                     <div class="item_wrap">
                         <div class="text">年龄</div>
-                        <div class="name_wrap">
+                        <div class="name_wrap"> -->
                             <!-- <input type="text" class="r-sty" placeholder="请输入年龄" v-model="years"/> - -->
-                            <van-button type="primary" @click="showYears">{{yearsType}} <i class="iconfont icon--xiangxiajiantou"></i></van-button>
+                            <!-- <van-button type="primary" @click="showYears">{{yearsType}} <i class="iconfont icon--xiangxiajiantou"></i></van-button>
                             <van-popup v-model="yearShow" position="bottom" :style="{ height: '50%' }">
                                 <van-picker :columns="yearsColumns" @change="onChange" @cancel="onCancelYears" @confirm="onConfirmYears" />
-                            </van-popup>
+                            </van-popup> -->
                             <!-- <span class="name">20岁/00后</span>
                             <i class="iconfont icon-xiangyoujiantou"></i> -->
-                        </div>
+                        <!-- </div>
                     </div>
-                </div>
+                </div> -->
                 <!-- <router-link class="my_look" :to="'/user/modifyUserName?titleName=星座&editTpye=5'">
                     <div class="item_wrap">
                         <div class="text">星座</div>
@@ -217,7 +217,62 @@
             },
 
             onRead(file) {
-                this.img =file.content
+                console.log(file)
+                var newImage = new Image();
+                var quality = 0.6;    //压缩系数0-1之间
+                var w = 800;
+                newImage.src = file.content;
+                newImage.setAttribute("crossOrigin", 'Anonymous');	//url为外域时需要
+                var imgWidth, imgHeight;
+                var that = this;
+                newImage.onload = function () {
+                    imgWidth = this.width;
+                    imgHeight = this.height;
+                    var canvas = document.createElement("canvas");
+                    var ctx = canvas.getContext("2d");
+                    if (Math.max(imgWidth, imgHeight) > w) {
+                        if (imgWidth > imgHeight) {
+                            canvas.width = w;
+                            canvas.height = w * imgHeight / imgWidth;
+                        } else {
+                            canvas.height = w;
+                            canvas.width = w * imgWidth / imgHeight;
+                        }
+                    } else {
+                        canvas.width = imgWidth;
+                        canvas.height = imgHeight;
+                        quality = 0.6;
+                    }
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(this, 0, 0, canvas.width, canvas.height);
+                    var base64 = canvas.toDataURL("image/jpeg", quality); //压缩语句
+                    // 如想确保图片压缩到自己想要的尺寸,如要求在50-150kb之间，请加以下语句，quality初始值根据情况自定
+                    // while (base64.length / 1024 > 150) {
+                    // 	quality -= 0.01;
+                    // 	base64 = canvas.toDataURL("image/jpeg", quality);
+                    // }
+                    // 防止最后一次压缩低于最低尺寸，只要quality递减合理，无需考虑
+                    // while (base64.length / 1024 < 50) {
+                    // 	quality += 0.001;
+                    // 	base64 = canvas.toDataURL("image/jpeg", quality);
+                    // }
+                    that.$refs.userImg.src = file.content;
+                    that.$axios.post('user/updateTou',{
+                        token:that.token,
+                        image:base64
+                    })
+                    .then((res)=>{
+                        console.log(res)
+                        if(res.data.status == 1){
+                            that.userImg = res.data.data;
+                            console.log(that.userImg)
+                            Toast('头像上传成功')
+                        }else{
+                            Toast(res.data.msg)
+                        }
+                    })
+                }
+                
             },
 
             saveInfo() {
@@ -230,13 +285,13 @@
                 }
                 if(that.isClick){return}
                 that.isClick =true
-               	that.$axios.post('user/update_user',{
+               	that.$axios.post('user/edit_name',{
                     'token':that.token,
-                    'image':that.img,
+                    // 'image':that.img,
                     'realname':	that.userName,
-                    'district':	that.code,
-                    'age': that.yearInfdex,
-                    'gender':that.radio
+                    // 'district':	that.code,
+                    // 'age': that.yearInfdex,
+                    // 'gender':that.radio
                 })
 				.then((res)=>{
                     var list =res.data
@@ -269,7 +324,8 @@
         height auto !important
     .data_wrap
         width 100%
-        height 100%
+        height 100vh
+        background #fef6d7
         overflow auto
         .content
             font-family: 'SourceHanSansHWSC-Regular'

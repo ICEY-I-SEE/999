@@ -1,7 +1,7 @@
 <template>
     <div class="noticeDetails">
         <!-- 头部组件 -->
-		<TopHeader custom-title="公告详情">
+		<TopHeader custom-title="资讯详情">
 			<i slot="backBtn" class="iconfont icon-fanhui"></i>
 		</TopHeader>
         <div class="content">
@@ -54,7 +54,7 @@ export default {
 
 <style lang="stylus" scoped>
 .noticeDetails
-    background-color #fff
+    background-color #fef6d7
     min-height 100vh
     .content
         width 80%

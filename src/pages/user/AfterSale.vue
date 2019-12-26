@@ -19,7 +19,7 @@
                 </div>
             </div>
             <div class="ss-price_wrap">
-               <p class="ss-price-msg">关注微信公众号“<span class="color-yellow">日日领商城</span>”</p>
+               <p class="ss-price-msg">关注微信公众号“<span class="color-yellow">玖酒久商城</span>”</p>
                <img class="ss-price-img" src="/static/images/user/sale_codes.png" />
             </div>
         </div>
@@ -53,7 +53,7 @@ export default {
                 else if(res.data.status == 999){
                     _that.$store.commit('del_token'); //清除token
                     setTimeout(()=>{
-                        _that.$router.push('/Login')
+                        _that.$router.push('/Home')
                     },1000)
                 }
                 else{
@@ -73,7 +73,7 @@ export default {
     .after-sale-wrap
         width 100%
         height 100vh
-        background url('/static/images/user/souhou.png') no-repeat
+        background #f4d67b
         background-size 100% 100%
         overflow auto
         .f-title-wrap
@@ -117,17 +117,17 @@ export default {
                 height 552px
                 background url('/static/images/user/kk_bg.png')
                 background-size 550px 548px
-                box-shadow: 0 0 0.28rem 0 rgba(119, 66, 164, 0.36);
+                box-shadow: 0 0 40px 0 rgba(119, 66, 164, 0.2);
                 border-radius 32px
                 position relative
                 margin 20px auto 10px
                 text-align center
                 .ss-price-msg
-                    padding 16px 0 10px
+                    padding 20px 0
                     transform scale(1,1.2)
                     letter-spacing 5px
                     .color-yellow
-                        color #fff100
+                        color #d90000
                 .ss-price-img
                     width 452px
                     height 452px

@@ -10,26 +10,26 @@ const router = new Router({
         /**
          * 登录
          */
-        {
-            path: '/Login',
-            name: 'Login',
-            component: () =>
-                import ('@/pages/login/Login'),
-        },
+        // {
+        //     path: '/Login',
+        //     name: 'Login',
+        //     component: () =>
+        //         import ('@/pages/login/Login'),
+        // },
         // 注册
-        {
-            path: '/Register',
-            name: 'Register',
-            component: () =>
-                import ('@/pages/login/Register'),
-        },
+        // {
+        //     path: '/Register',
+        //     name: 'Register',
+        //     component: () =>
+        //         import ('@/pages/login/Register'),
+        // },
         // 修改密码
-        {
-            path: '/EditPassword',
-            name: 'EditPassword',
-            component: () =>
-                import ('@/pages/login/EditPassword'),
-        },
+        // {
+        //     path: '/EditPassword',
+        //     name: 'EditPassword',
+        //     component: () =>
+        //         import ('@/pages/login/EditPassword'),
+        // },
         
 
         /**
@@ -349,6 +349,13 @@ const router = new Router({
             component: (resolve) => require(['@/pages/pay/PayWay'], resolve),
             meta: { requireAuth: true }
         },
+        // 支付协议
+        {
+            path: '/Pay/PayText',
+            name: 'PayText',
+            component: (resolve) => require(['@/pages/pay/PayText'], resolve),
+            meta: { requireAuth: true }
+        },
         // 支付成功
         {
             path: '/Pay/PaySucceed',
@@ -422,6 +429,13 @@ const router = new Router({
             component: () =>
                 import ('@/pages/user/modifyUserName'),
             meta: { requireAuth: true }
+        },
+        // 修改手机号码
+        {
+            path: '/user/SetPhone',
+            name: 'SetPhone',
+            component: () =>
+                import ('@/pages/user/SetPhone'),
         },
         // 修改支付密码
         {
@@ -500,6 +514,30 @@ const router = new Router({
                 import ('@/pages/user/myWallet/CashCoupon'),
             meta: { requireAuth: true }
         },
+        // 预约
+        {
+            path: '/user/appointment',
+            name: 'appointment',
+            component: () =>
+                import ('@/pages/user/appointment'),
+            meta: { requireAuth: true }
+        },
+        // 预约列表
+        {
+            path: '/user/intment',
+            name: 'intment',
+            component: () =>
+                import ('@/pages/user/intment'),
+            meta: { requireAuth: true }
+        },
+        // 记录
+        {
+            path: '/user/Record',
+            name: 'Record',
+            component: () =>
+                import ('@/pages/user/Record'),
+            meta: { requireAuth: true }
+        },
         // 我的团队
         {
             path: '/user/myTeam',
@@ -532,7 +570,14 @@ const router = new Router({
                 import ('@/pages/user/TeamDetails'),
             meta: { requireAuth: true }
         },
-
+        // 兑换
+        {
+            path: '/user/exchange',
+            name: 'exchange',
+            component: () =>
+                import ('@/pages/user/exchange'),
+            meta: { requireAuth: true }
+        },
         // 我的分享
         {
             path: '/user/mySharing',
@@ -673,35 +718,35 @@ const router = new Router({
     ]
 })
 
-//注册全局钩子函数
-router.beforeEach((to, from, next) => {
-    //捕获uid,并且保存下来到sessionStorage
-    if(JSON.stringify(to.query) == "{}"){
-    } else {
-        let uid = to.query.uid;
-        sessionStorage.setItem('uid',uid)
-    }
-    //判断当前页面是否需要登录，true
-    if (to.matched.some(r => r.meta.requireAuth)) {
-        if (to.path === '/Login' || to.path === '/Register' ||  to.path === '/UserTreal' || to.path === '/PrivacyPolicy') {
-            next()
-        } else {
-            let token = localStorage.getItem('Authorization');
-            if (token === null || token === '') { //判断是否有token
-                // Dialog.confirm({
-                // 	message: '亲，还没有登录哦!'
-                // }).then(() =>{
-                // 	next('/Login');
-                // })
-                next('/Login');
-            } else {
-                next()
-            }
-        }
-    } else {
-        next()
-    }
-})
+// 注册全局钩子函数
+// router.beforeEach((to, from, next) => {
+//     //捕获uid,并且保存下来到sessionStorage
+//     if(JSON.stringify(to.query) == "{}"){
+//     } else {
+//         let uid = to.query.uid;
+//         sessionStorage.setItem('uid',uid)
+//     }
+//     //判断当前页面是否需要登录，true
+//     if (to.matched.some(r => r.meta.requireAuth)) {
+//         if (to.path === '/Login' || to.path === '/Register' ||  to.path === '/UserTreal' || to.path === '/PrivacyPolicy' || to.path === '/Home') {
+//             next()
+//         } else {
+//             let token = localStorage.getItem('Authorization');
+//             if (token === null || token === '') { //判断是否有token
+//                 // Dialog.confirm({
+//                 // 	message: '亲，还没有登录哦!'
+//                 // }).then(() =>{
+//                 // 	next('/Login');
+//                 // })
+//                 next('/Login');
+//             } else {
+//                 next()
+//             }
+//         }
+//     } else {
+//         next()
+//     }
+// })
 
 router.afterEach(to => {
     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {

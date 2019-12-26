@@ -1,16 +1,35 @@
 <template>
     <div class="MyTeam">
         <!-- 头部组件 -->
-		<Team-Header custom-title="我的团队" style="font-weight:800;">
+		<Team-Header custom-title="所有酒庄" style="font-weight:800;">
 			<!-- 返回按钮 -->
 			<i slot="backBtn" class="iconfont icon-fanhui"></i>
 		</Team-Header>
 
         <div class="content">
-            <div class="team-top">
+            <!-- <div class="team-top">
                 <div class="inner-wrap">
                     <span class="superior-name">上级:{{shanglist.realname}}</span>
                     <span class="superior-id">上级ID:{{shanglist.id}}</span>
+                </div>
+            </div> -->
+
+            <!-- 酒庄信息 -->
+            <div class="team-info clearfix">
+                <div class="info-title">
+                    酒庄总人数 {{teamList.team_count}}
+                </div>
+                <div class="info-item" @click="jumpTo('TeamList','type',1)">
+                    游客: <span>{{teamList.vip}}</span>
+                </div>
+                <div class="info-item" @click="jumpTo('TeamList','type',2)">
+                    酒仙: <span>{{teamList.vip_999}}</span>
+                </div>
+                <div class="info-item" @click="jumpTo('TeamList','type',3)">
+                    酒神: <span>{{teamList.svip_1}}</span>
+                </div>
+                <div class="info-item" @click="jumpTo('TeamList','type',4)">
+                    酒祖: <span>{{teamList.svip_2}}</span>
                 </div>
             </div>
 
@@ -60,10 +79,10 @@
             </div>
 
             <!-- 无数据 -->
-            <div class="none" v-show="tuanlist.length == 0 && zhilist.length == 0">
+            <!-- <div class="none" v-show="tuanlist.length == 0 && zhilist.length == 0">
                 <img src="/static/images/public/none-icon.png"/>
                 <p>当前还没有相关数据</p>
-            </div>
+            </div> -->
         </div>
          <!-- 底部导航 -->
         <Navigate></Navigate>
@@ -71,7 +90,7 @@
 </template>
 
 <script>
-    import TeamHeader from "@/pages/common/header/TopHeaderNew"
+    import TeamHeader from "@/pages/common/header/TopHeader"
     import Navigate from "@/pages/common/footer/Navigate"
     export default {
     name: "myTeam",
@@ -102,13 +121,32 @@
                     _that.teamList =list.data;
                     _that.shanglist =list.data.shanglist
                     _that.tuanlist =list.data.tuanlist
-                    _that.zhilist =list.data.zhilist
+                    _that.zhilist =list.data.list
                     // console.log( _that.teamList)
                 }else{
                     _that.$toast(list.msg)
                 }
             })
-        }
+        },
+        /**
+		 * 路由跳转
+		 */
+		jumpTo(path,name,id){
+			// 商品路由跳转
+			if(path && name && id){
+				this.$router.push(path+'?'+ name +'=' + id);
+				return false;
+			}
+			// 跳转指定路由
+			if(path && !name && !id){
+				this.$router.push(path);
+				return false;
+			}
+			//后退
+			else{
+				this.$router.go(-1)
+			}
+		},
     },
     filters: {
         formatDate(time) {
@@ -140,13 +178,14 @@
 
 <style lang="stylus" scoped>
     .MyTeam
-        width 100%
-        background linear-gradient(#f1f1f1, #dfe1f3)
+        width 100vw
+        height 100vh
+        background #fef6d7
         .TopHeader
             .iconfont
                 font-size 45px
         .content
-            padding 0 50px 126px
+            padding 30px 50px 126px
             box-sizing border-box
             color #151515
             font-size 28px
@@ -180,6 +219,26 @@
                     display flex
                     align-items center
                     justify-content space-between
+            .team-info
+                margin-bottom 40px
+                width 100%
+                background #fff
+                line-height 100px
+                overflow hidden
+                border-radius 20px
+                box-shadow 0 3px 10px #e63100
+                .info-title
+                    color #fff
+                    text-align center
+                    background #e63100
+                .info-item
+                    float left
+                    text-align center
+                    width 49.8%
+                    height 100px
+                    border-top 1px solid #ccc
+                    &:nth-of-type(2n)
+                        border-right 1px solid #ccc
             .team-list
                 margin-bottom 20px
                 .group-item
@@ -219,13 +278,13 @@
                         flex-direction column
                         font-family "PangMenZhengDao"
                         .user-id
-                            width 144px
+                            width 200px
                             height 50px
                             text-align center
                             font-size 18px
                             color #ffffff
                             border-radius 18px
-                            background linear-gradient(to right,#fa8cfa 0%,#4778fe 100%)
+                            background linear-gradient(to right,#e63100 0%,#d90000 100%)
                             background-size 100%
                             margin-bottom 20px
                             letter-spacing 1px

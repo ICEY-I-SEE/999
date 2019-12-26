@@ -6,7 +6,8 @@
         </TopHeader>
 
         <div class="content">
-            <div class="input-amount"><input type="number" v-model="money" oninput="if(value.length > 10)value = value.slice(0, 12)"  placeholder="请输入充值金额" @input="changAmount($event)" /></div>
+            <div class="input-amount"><input type="number" readonly="readonly" @touchstart.stop="show1=true" v-model="money" oninput="if(value.length > 10)value = value.slice(0, 12)"  placeholder="请输入充值金额" @input="changAmount($event)" /></div>
+            <div class="tips">充值金额只能为100的倍数,不输入默认为100元。</div>
             <div class="amount-list">
                 <div class="amount-item" 
                     v-for="(item,index) in amountList"
@@ -23,6 +24,14 @@
             </div>
         </div>
 
+        <van-number-keyboard
+            :show="show1"
+            extra-key="."
+            close-button-text="完成"
+            @blur="show1 = false"
+            @input="onInput1"
+            @delete="onDelete1"
+        />
    </div>
 </template>
 
@@ -37,25 +46,58 @@ export default {
         return{
             nowIndex:0,
             amountList:[],
-            rechargeAmount:50,
+            rechargeAmount:100,
             token:this.$store.getters.optuser.Authorization,
             goods_id:'',
-            money:''
+            money:'',
+            isClick:false,
+            show1: false,
         }
     },
     created(){
-        this.$store.commit('showLoading')       //加载loading
-        this.getRechargeData();
+        // this.$store.commit('showLoading')       //加载loading
+        // this.getRechargeData();
         
     },
     methods:{
+        onInput1(value){
+            this.money = (this.money + value);
+            if(isNaN(this.money) || this.money==""){
+                return this.rechargeAmount = 0
+            }
+            this.rechargeAmount = (this.money)
+        },
+        onDelete1(){
+            this.money = this.money.slice(0, this.money.length - 1);
+        },
         linkToPay(){
             let goodsId = this.goods_id;
             if(this.money != ''){
                 goodsId = 0
             }
-            this.$router.push({
-                path: '/Pay/PayWay?goods_id=' + goodsId + '&price=' + this.rechargeAmount,
+            if(this.isClick){
+                return
+            }
+            this.isClick=true;
+            let url = 'pay/recharge_pay',
+                that = this;
+            this.$axios.post(url,{
+                token:this.$store.getters.optuser.Authorization,
+                pay_type:2,
+                money:this.rechargeAmount,
+            })
+            .then((res) => {
+                // console.log(res)
+                if(res.data.status == 200){
+                    that.wxpay(res.data.data.url);
+                }else{
+                    that.$toast(res.data.msg)
+                }
+                this.isClick=false
+            })
+            .catch((error) => {
+                that.$toast('请求错误')
+                that.isClick=false
             })
         },
         getRechargeData(){
@@ -74,7 +116,7 @@ export default {
                 else if(res.data.status == 999){
                     this.$store.commit('del_token'); //清除token
                     setTimeout(()=>{
-                        this.$router.push('/Login')
+                        this.$router.push('/Home')
                     },1000)
                 }
                 else{
@@ -99,7 +141,41 @@ export default {
             this.rechargeAmount = e.target.innerText;
             this.goods_id = goodsId;
             this.money = ''
-        },       
+        },     
+        wxpay(pay_params) {
+            if (typeof WeixinJSBridge == "undefined"){
+                if( document.addEventListener ){
+                    document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+                }else if (document.attachEvent){
+                    document.attachEvent('WeixinJSBridgeReady', onBridgeReady); 
+                    document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+                }
+                }else{
+
+                this.onBridgeReady(pay_params);
+            }
+        },
+        onBridgeReady(params) {
+            let that = this;
+            WeixinJSBridge.invoke(
+                'getBrandWCPayRequest', {
+                    "appId": params.appId,  //公众号名称，由商户传入     
+                    "timeStamp": params.timeStamp,  //时间戳，自1970年以来的秒数     
+                    "nonceStr": params.nonceStr,  //随机串     
+                    "package": params.package,     
+                    "signType": params.signType,  //微信签名方式：     
+                    "paySign": params.paySign  //微信签名 
+                },
+                function(res){
+                    if(res.err_msg == "get_brand_wcpay_request:ok" ){
+                        alert('支付成功！');
+                        setTimeout(()=>{
+                            that.$router.go(-1)
+                        },1000)
+                    }
+                }
+            ); 
+        },  
     },
     filters:{
 		//格式化金钱
@@ -116,20 +192,24 @@ export default {
 .Recharge
     width 100%
     min-height 100vh
-    background #ffffff
+    background #fef6d7
     .content
         padding 0 24px
         box-sizing border-box
         font-family 'SourceHanSansHWSC-Regular'
         .input-amount
+            margin 20px auto
             height 90px
             display flex
             align-items center
+            border-bottom 1px solid #ccc
             input 
                 width 100%
                 height 60px
                 line-height 60px
                 font-size 28px
+        .tips
+            color #d90000
         .amount-list
             display flex
             flex-wrap wrap

@@ -1,5 +1,5 @@
 <template>
-    <div class="Details" id="Details">
+    <div class="Details" id="Details" @click="more=false">
         <!-- 头部组件 -->
 		<!-- <TopHeader custom-title="商品详情">
 			<i slot="backBtn" class="iconfont icon-fanhui"></i>
@@ -10,18 +10,35 @@
             <i class="iconfont icon-ai54"></i>
         </div> -->
 
-        <div class="TopHeader">
+        <div class="TopHeader" :style="{'background':`rgba(255,255,255,${opacity})`}">
             <div class="backBtn" @click="JumpTo()">
                 <i class="iconfont icon-fanhui"></i>
             </div>
-            <div class="title"><span class="title-msg" style="font-weight:bold;">商品详情</span></div>
+            <div class="title" :style="`opacity:${opacity}`"><span class="title-msg" style="font-weight:bold;">商品详情</span></div>
+            <div class="rightBtn" @click.stop="rightBtn()">
+                <i class="home-icon"></i>
+            </div>
+            <div class="more" :style="more?'top:120%;opacity:1;display:block;':''">
+                <div class="more-item" @click="more_jump('Home')">
+                    <img src="/static/images/public/nav1s.png"> <span>首页</span>
+                </div>
+                <div class="more-item" @click="more_jump('Category')">
+                    <img src="/static/images/public/nav2s.png"> <span>商品分类</span>
+                </div>
+                <div class="more-item" @click="more_jump('Cart')">
+                    <img src="/static/images/public/nav3s.png"> <span>购物车</span>
+                </div>
+                <div class="more-item" @click="more_jump('User')">
+                    <img src="/static/images/public/nav4s.png"> <span>我的</span>
+                </div>
+            </div>
         </div>
-        <div class="heihgt-88"></div>
+        <!-- <div class="heihgt-88"></div> -->
 
         <!-- 产品图轮播 -->
         <div class="detailsSwiper" v-if="goodsData !=''">
             <van-swipe indicator-color="white">
-                <van-swipe-item v-if="goodsData.goods_video !=''">
+                <van-swipe-item v-if="goodsData.goods_video">
                     <video-player  class="video-player vjs-custom-skin"
                         ref="videoPlayer"
                         :playsinline="playsinline" 
@@ -51,14 +68,15 @@
                     </div>
                     <!-- <span class="original-price">原价￥{{this.goodsData.original_price}}</span> -->
                 </div>
+                <p class="price" v-if="goodsData.vip_money">会员折扣价 <span class="discount-price">￥{{goodsData.vip_money}}</span></p>
                 <!-- 商品名称 -->
                 <div class="goodsName">
                     <h1 style="font-weight:500;">{{this.goodsData.goods_name}}</h1>
+                    <div class="goods-dec" v-if="this.goodsData.desc!=''">{{this.goodsData.desc}}</div>
                     <div class="goods-sto">
                         <span>库存：{{this.goodsData.stock}}</span>
                         <span>销量：{{this.goodsData.number_sales}}</span>
                     </div>
-                    <div class="goods-dec" v-if="this.goodsData.desc!=''">{{this.goodsData.desc}}</div>
                 </div>
                 <div class="group-warp">
                     <div class="g-option">
@@ -153,7 +171,7 @@
                     <div class="slide-fade-title">
                         <img class="-fade-title-img" :src="checkSKU.img" />
                         <div>
-                            <p class="-title-msg-1">￥{{checkSKU.price}}</p>
+                            <p class="-title-msg-1">￥{{goodsData.vip_money?goodsData.vip_money:checkSKU.price}}</p>
                             <p class="-title-msg-2">库存{{checkSKU.stock}}件</p>
                             <p class="-title-msg-3">选择 <span>{{checkSKU.sku_attr}}</span></p>
                         </div>
@@ -165,7 +183,7 @@
                             <p class="-list-title" :spec-id="list.spec_id">{{list.spec_name}}</p>
                             <ul class="-list-info" :style="{'padding-bottom':'130px'}">
                                 <li class="-info-a"  v-for="(oItem,key) in list.res" :key="key" :class="[oItem.isShow?'':'noneActive',oItem.isSelect?'chosed':'']" :data-id='oItem.attr_id'  @click="tabInfoChange(index,key,oItem.attr_id,oItem.attr_name)">
-                                    <img class="-info-a-msg" :src="oItem.img"/>
+                                    <!-- <img class="-info-a-msg" :src="oItem.img"/> -->
                                     {{oItem.attr_name}}
                                 </li>
                             </ul>
@@ -217,7 +235,7 @@
             <div class="tc-wrap">
                 <div class="tc-wrap-text" v-if="tc==1"><p>您是商城新用户，可以领取一次免费商品。成为<span class="akey">VIP会员</span>，即可连续3个月每天都领取一次哦~</p></div>
                 <div class="tc-wrap-text" v-if="tc==2"><p>您已领取过一次免费商品。成为<span class="akey">VIP会员</span>，即可连续3个月每天都领取一次哦~</p></div>
-                <div class="tc-wrap-text" v-if="tc==3"><p class="p3">您是商城普通用户，不能购买商城会员价商品，成为<span class="akey">VIP会员</span>，即可持续享受日日领商城会员全网最低价，无数大牌好物惊爆价等你来~</p></div>
+                <div class="tc-wrap-text" v-if="tc==3"><p class="p3">您是商城普通用户，不能购买商城会员价商品，成为<span class="akey">VIP会员</span>，即可持续享受玖酒久商城会员全网最低价，无数大牌好物惊爆价等你来~</p></div>
                 <div class="btn" v-if="tc==2 || tc == 3">
                     <button class="lj" @click="buyCard">了解会员</button>
                     <button class="bk" @click="close">暂不考虑</button>
@@ -231,7 +249,7 @@
 import Vue from 'vue'
 import util from '@/utils'
 // import AreaList from './area'
-import TopHeader from "@/pages/common/header/TopHeader"
+// import TopHeader from "@/pages/common/header/TopHeader"
 import { ImagePreview, Toast } from 'vant'
 import "video.js/dist/video-js.css";
 import { videoPlayer } from "vue-video-player";
@@ -240,7 +258,7 @@ import { Dialog } from 'vant';
 export default {
     name:'Details',
     components:{
-        TopHeader,
+        // TopHeader,
         videoPlayer
     },
     data(){
@@ -298,6 +316,8 @@ export default {
             shareImg:'',
             goodsName:'',
             uid:'',
+            more:false,
+            opacity:''
 
         }
     },
@@ -307,6 +327,7 @@ export default {
         this._getGoodsData();  //请求商品信息
         this._getCommentList(); //请求评论数据
         this.get_default_address();
+        window.addEventListener('scroll', this.handleScroll);
     },
     computed: {
         player() {
@@ -343,6 +364,9 @@ export default {
         close(){
             this.isTc=false;
         },
+        rightBtn(){
+            this.more = !this.more;
+        },
         JumpTo(){   //放回上一页
             var uid = this.$route.query.uid;
             if(uid != undefined){
@@ -350,6 +374,13 @@ export default {
             }else{
                 this.$router.back();
             }
+        },
+        handleScroll(){
+            this.more = false;
+            this.opacity = window.scrollY * 0.0032;
+        },
+        more_jump(url){
+            this.$router.push(`/${url}`);
         },
         tips(){
             this.isTips = !this.isTips;
@@ -479,7 +510,7 @@ export default {
                     if(uid != undefined){
                         localStorage.setItem('details_url','/Details?u_code='+uid+'&goods='+this.goodsId)
                     }
-                    this.$router.push('/Login')
+                    this.$router.push('/Home')
                     this.$store.commit('hideLoading')
                 }
                 else{
@@ -688,7 +719,7 @@ export default {
                         if(res.data.data.img.length > 0){
                             this.shareImg = res.data.data.img[0].picture
                         }
-                        this.wechatShare(res.data.data.package)   
+                        // this.wechatShare(res.data.data.package)   
                     }
                     var tc = that.goodsData.popup
                     this.tc = tc
@@ -713,7 +744,7 @@ export default {
                     if(uid != undefined){
                         localStorage.setItem('details_url','/Details?u_code='+uid+'&goods_id='+this.goodsId)
                     }
-                    this.$router.push('/Login')
+                    this.$router.push('/Home')
                     this.$store.commit('hideLoading')
                 }
                 //初始化规格
@@ -1004,7 +1035,7 @@ export default {
             }
             this.checkSKU.price=chesku.price
             this.checkSKU.stock=chesku.inventory
-            this.checkSKU.img=chesku.img
+            // this.checkSKU.img=chesku.img
             this.checkSKU.sku_attr=sku_name
         },
     }
@@ -1048,7 +1079,7 @@ a
         line-height 88px
         color #151515
         font-size 30px
-        background-color #ffffff
+        // background-color #ffffff
         display flex
         justify-content space-between
         align-items center
@@ -1073,9 +1104,67 @@ a
             white-space nowrap
             overflow hidden
             text-overflow ellipsis
+            opacity 0
             .title-msg
                 display inline-block
                 transform scale(1,1.1)
+        .rightBtn
+            width 10%
+            height 100%
+            text-align center
+            position absolute
+            right 0
+            top 0
+            display flex
+            justify-content center
+            align-items center
+            .home-icon
+                width 100%
+                height 46px
+                display block
+                background url(/static/images/public/more.png) no-repeat center center
+                background-size 42px 40px
+        .more
+            position absolute
+            right 10px
+            top 120%
+            border-radius 10px
+            background #fff
+            transition 1s
+            opacity 0
+            display none
+            // box-shadow 0 3px 15px #e01a00
+            &::after
+                position absolute
+                right 10px
+                top -40px
+                content ''
+                display block
+                border-left:20px solid transparent;
+                border-right:20px solid transparent;
+                border-bottom:40px solid #fff;
+            .more-item
+                display flex
+                justify-content space-between
+                align-items center
+                width 255px
+                padding 0 24px
+                box-sizing border-box
+                border-bottom 1px solid #ccc
+                span
+                    display block
+                    width 140px
+                    text-align justify
+                    text-align-last justify
+                &:nth-of-type(2)
+                    img
+                        width 20px
+                        height 35px
+                &:nth-last-of-type(1)
+                    border 0
+                img
+                    width 30px
+                    height 30px
     .marB-0
         margin-bottom 0 !important
     .none-comment
@@ -1140,7 +1229,7 @@ a
                 display flex
                 align-items center
                 .icon-aixin
-                    padding-top 4px
+                    margin-right 15px
                 .c-active
                     color #f30c0c
                     .icon-54
@@ -1228,7 +1317,9 @@ a
                 background url("/static/images/details/line-right.png") right  center no-repeat
                 background-size 2px 27px
             .van-tabs >>> .van-tab--active
-                color #f70a0a
+                color #b98a00
+            .van-tabs >>> .van-tabs__line
+                background #b98a00
             .van-tabs >>> .van-tab:last-child span
                 background none
             // 商品详情
@@ -1488,10 +1579,10 @@ a
             font-family: 'PangMenZhengDao';
             transform: scale(1,1.1);
             .bar-btn-1
-                background #f376ad
+                background #e63100
                 letter-spacing 3px
             .bar-btn-2
-                background #df51c8
+                background #d90000
                 letter-spacing 3px
             .-list-a
                 width 50%

@@ -1,10 +1,10 @@
 <template>
     <div class="MySharing">
-        <div class="sharing-code-wrap"><img class="sharing-code-img" :src="ewmList.return_img"/></div>
+        <!-- <div class="sharing-code-wrap"><img class="sharing-code-img" :src="ewmList.return_img"/></div> -->
         <!-- 头部组件 -->
-		<My-Header custom-title="" class="head">
+		<My-Header custom-title="分享二维码" class="head">
 			<!-- 返回按钮 -->
-			<i slot="backBtn" class="iconfont icon-fanhui"></i>
+			<i slot="backBtn" style="color:#000;" class="iconfont icon-fanhui"></i>
 		</My-Header>
         <div class="content">
             <div class="main">
@@ -13,18 +13,20 @@
                         <img :src="siteList.avatar"/>
                     </div>
                     <div class="name">
-                        <span>ID: {{siteList.id}}</span>
-                        <span>{{siteList.realname}}</span>
+                        <p>{{siteList.realname}}</p>
+                        <p>ID: {{siteList.id}}</p>
                     </div>
+                    <img class="logo" src="/static/images/user/logo.png">
                     <!-- <p class="name">邀请码:{{siteList.code}}</p> -->
                 </div>
                 <div class="mark_wrap">
                     <div class="mark">
                         <div class="mark_img">
-                            <img :src="ewmList.return_qr_code"/>
+                            <div class="title">实现富稀传奇酒自由，请你免费喝一年。</div>
+                            <img :src="ewmList.return_qr_code||siteList.qrcode"/>
                             <!-- 必须是id 和实例化的第一参数对应 -->
                             <!-- <div id="qrcode"></div> -->
-                            <p class="touch">截图保存二维码</p>
+                            <p class="touch">截图可保存二维码~~</p>
                         </div>
                     </div>
                     
@@ -83,7 +85,7 @@
         // },
         // 接口
         sharing() {
-            var url = 'user/personal'
+            var url = 'user/sharePoster'
             var params = new URLSearchParams();
             params.append('token', this.$store.getters.optuser.Authorization);  
             this.$axios({
@@ -135,7 +137,7 @@
     .MySharing
         width 100%
         height 100vh
-        background url(/static/images/user/ewm_bgs.gif) no-repeat
+        background url(/static/images/user/ewm_bgs.png) no-repeat
         background-size cover
         position relative
         overflow hidden
@@ -154,7 +156,7 @@
             color #fff
             background none
         .content
-            padding 135px 0 0
+            padding 125px 0 0
             font-family PangMenZhengDao
             .main
                 position relative
@@ -162,65 +164,91 @@
                 width 702px
                 border-radius 10px
             .img_head
-                padding 220px 0 0
+                position relative
+                margin 0 auto
+                width 540px
+                height 164px
+                border-top-left-radius 20px
+                border-top-right-radius 20px
+                background linear-gradient(45deg, #e63100, #d90000)
                 .img 
-                    width 220px
-                    height 220px 
+                    width 122px
+                    height 122px 
                     margin 0 auto
                     position absolute
-                    top -10px
-                    left 50%
-                    margin-left -110px
-                    border 2px solid #fff
+                    top 22px
+                    left 38px
                     border-radius 50%
                     overflow hidden
                     img 
                         width 100%
                         height 100%
                 .name 
+                    position relative
+                    float right 
+                    width 340px
+                    height 100%
                     font-size 30px
-                    line-height 75px
-                    text-align center
+                    line-height 50px
+                    padding-left 55px
+                    padding-top 20px
                     color #fff
                     letter-spacing 4px
-                    margin 20px 0
+                    box-sizing border-box
+                    &::before
+                        content ''
+                        display block
+                        position absolute
+                        top 0
+                        left 0
+                        bottom 0
+                        margin auto
+                        width 4px
+                        height 110px
+                        background #fff
+                .logo
+                    position absolute
+                    left 0
+                    right 0
+                    bottom -100px
+                    width 155px
+                    height 155px
+                    border-radius 50%
+                    margin auto
+                    z-index 9
             .mark_wrap
                 margin 0 auto 30px
                 border-radius 10px
                 padding 0 60px
                 box-sizing border-box
                 .mark
-                    width 500px
-                    height 500px
+                    width 540px
+                    height 650px
                     margin 0 auto
-                    padding 40px 50px 40px 40px
+                    padding 40px 24px
                     background-size 100% 100%
                     box-sizing border-box
                     position relative
                     background #fff
-                    border-radius 30px   
+                    border-bottom-left-radius 20px
+                    border-bottom-right-radius 20px
+                    .title
+                        margin-top 60px 
+                        text-align center
                     img 
-                        width 100%  
+                        display block
+                        margin 0 auto
+                        width 90%  
                               
                     .touch
                         font-size 30px
                         text-align center
-                        color #fff  
                         font-size 33px
                         letter-spacing 3px
-                        color #1b1b1b 
+                        color #d90000 
                         position absolute
-                        bottom 4px  
+                        bottom 2%  
                         width 100%
                         text-align center 
                         left 0                           
-</style>
-<style lang="stylus">
-.MySharing
-    .head
-        .TopHeader
-            background-color transparent !important 
-            border none
-            color #fff
-        
 </style>

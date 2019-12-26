@@ -59,10 +59,11 @@
                         <img class="-list-img" :src="item.img" />
                         <div class="-detial-">
                             <p class="-d-msg apostrophe">{{item.goods_name}} {{item.spec_key_name}}</p>
-                            <p class="-d-msg2">
+                            <div class="-d-msg2">
                                 <span>￥ {{item.goods_price}}</span>
                                 <span>x {{item.goods_num}}</span>
-                            </p>
+                                <p v-if="item.vip_money">会员折扣价 ￥{{item.vip_money}}</p>
+                            </div>
                         </div>
                     </router-link>
                     <div class="g-list-b">
@@ -197,6 +198,7 @@ export default {
             idCard:'',
             shipping_price:'',
             is_free:0,
+            isClick:false,
             nodatas:{
                 'imgSrc':'/static/images/cart/cart_icon.png',
                 'text':'没有订单信息~',
@@ -209,7 +211,7 @@ export default {
     created(){
         // console.log(goodsList)
         this.$store.commit('showLoading')       //加载loading
-        this.reqCashCoupon();
+        // this.reqCashCoupon();
         
         var info =JSON.parse(sessionStorage.getItem('cartInfo'))
         if(typeof(info.cart_id)!="undifined"){
@@ -265,18 +267,24 @@ export default {
                     _that.goodsList =list.data
                     _that.coupon = list.data.coupon //代金券    
                     _that.addrRes =list.data.addr_res
-                    _that.count =_that.goodsList.goods_res[0].goods_num
                     _that.shipping_pric =list.data.shipping_price
                     _that.is_free =list.data.goods_res[0].is_free
+                    _that.pay_data = list.data.pay_type
+                    let num = '';
+                    list.data.goods_res.forEach(item => {
+                        if(!item.goods_num) return num;
+                        num = Number(num)+Number(item.goods_num)
+                    });
+                    _that.count = num
                     // console.log(list.data.shipping_price)
-                    _that.getShipping()
+                    // _that.getShipping()
                     this.$store.commit('hideLoading')       //加载loading
                 }
                 else if(res.data.status == 999){
 					this.$toast(res.data.msg)
 					this.$store.commit('del_token'); //清除token
 					setTimeout(()=>{
-						this.$router.push('/Login')
+						this.$router.push('/Home')
 					},1000)
 				}
                 else{
@@ -304,7 +312,7 @@ export default {
 					this.$toast(res.data.msg)
 					this.$store.commit('del_token'); //清除token
 					setTimeout(()=>{
-						this.$router.push('/Login')
+						this.$router.push('/Home')
 					},1000)
 				}
                 else{
@@ -329,15 +337,33 @@ export default {
 
                 checkedYh = 0;
             }
+            if(_that.payPassword == ''&&_that.pay_type == 1){
+                this.showPwd = true;
+                this.showKeyboard = true;
+                this.paswPopup =true
+                return false;
+            }
+            if(!_that.addrRes.address_id){
+                _that.$toast('请选择收货地址!')
+                return false;
+            }
+            if(_that.goodsList.mobile==0){
+                _that.$toast('请绑定手机号码!')
+                setTimeout(()=>{
+                    _that.$router.push({name:'SetPhone'})
+                },1000)
+                return false;
+            }
             _that.$axios.post('Order/submitOrder',{
-                'cart_id': _that.carId,
+                'cart_id': _that.carId, 
                 'address_id': _that.addrRes.address_id,
                 'pay_type':_that.pay_type,
                 'user_note':_that.userNote,
                 'token': _that.token,
                 'coupon_id':_that.coupon_id,
                 'idon':card,
-                'welfare':checkedYh
+                'welfare':checkedYh,
+                'pwd':_that.payPassword
             })
             .then((res)=>{
                 var list = res.data,updatePrice;
@@ -349,17 +375,19 @@ export default {
                     }else{
                         updatePrice =this.updatePrice
                     }
+                    // _that.$toast('下单成功!')
+                    // setTimeout(() => {                   
+                    //     this.$router.push('/Order/OrderDetails?order_id=' + this.order_id)
+                    // },2000)
                     this.$router.push({
-
-                        
-                        path: '/Pay/PayWay?order_id=' +this.order_id+'&price='+updatePrice,
+                        path: '/Pay/PayWay?order_id=' +this.order_id+'&price='+updatePrice+'&pwd='+this.goodsList.pwd,
                     })
                 }
                 else if(res.data.status == 999){
 					this.$toast(res.data.msg)
 					this.$store.commit('del_token'); //清除token
 					setTimeout(()=>{
-						this.$router.push('/Login')
+						this.$router.push('/Home')
 					},1000)
                 }
                 else{
@@ -379,7 +407,10 @@ export default {
         hidePwd(){
             this.showPwd=false;
             this.payPassword = '';
-        }
+        },
+        JumpTo(){   
+            this.$router.push('/Home')
+        },
     },
     computed:{
         updatePrice(){
@@ -389,7 +420,7 @@ export default {
                 subtotal =0,
                 totalPrice
             for(var i in goods_res){
-                price = new Number(price) + new Number(goods_res[i].subtotal_price)
+                price = new Number(price) + new Number(goods_res[i].vip_money?goods_res[i].vip_money:goods_res[i].goods_price)
                  console.log(price)
             }
             totalPrice = price + new Number(_that.shipping_price) - this.couponsPrice
@@ -574,6 +605,22 @@ export default {
                     .-b-msg
                         color:#999
                         margin-right:40px
+                    .pay-price
+                        padding 20px 0
+                        overflow hidden
+                        color #323233
+                        font-size 28px
+                        line-height 28px
+                        background-color #fff
+                        margin-top 20px
+                        display flex
+                        justify-content space-between
+                        .pay-price-red
+                            color #ff2d10
+                    .pay-way /deep/ .van-cell
+                        padding 20px 0
+                    .pay-way /deep/ .van-cell__value
+                        flex none
                     .row-line /deep/ .van-hairline--top-bottom::after
                         border none
                     .row-line
@@ -716,7 +763,41 @@ export default {
                 padding 30px 0 20px
         .van-number-keyboard
             z-index 3000!important
-
+        .pasw-popup
+            position fixed
+            width 100%
+            height 100%
+            bottom 0
+            left 0
+            z-index 9999
+            .popup-inner
+                width 100%
+                height 100%
+                background rgba(0,0,0,0.5)
+            .-popup-cont
+                position absolute
+                bottom 0
+                z-index 1
+                left 0
+                width 100%
+                background #fff
+                padding-top 40px
+                .fg-password
+                    text-align right
+                    margin: 30px
+                    a
+                        color: #1a89fa
+                .van-password-input__security 
+                    height: 100px
+                .van-password-input__security li
+                    border 1px solid #bdbdbd
+                    border-left 0
+                .van-password-input__security li:first-child
+                        border-left 1px solid #bdbdbd
+                .van-password-input__security li:first-child
+                    // border-left 1px solid #999
+                .van-number-keyboard
+                    position relative
         .footer-height
             width 100%
             height 140px
@@ -746,7 +827,7 @@ export default {
                         color: #757575;
             .footer-b
                 width:221px;
-                background-image: linear-gradient(90deg,#df51c8 0%, #e964bb 62%, #f376ad 100%);
+                background-image: linear-gradient(90deg,#e63100 0%, #d90000 100%);
                 color:#fff;
                 line-height:120px;
                 text-align: center;

@@ -91,7 +91,7 @@ export default {
                 }else if(res.data.status===999){
                     this.$store.commit('del_token'); //清除token
                     setTimeout(()=>{
-                        this.$router.push('/Login')
+                        this.$router.push('/Home')
                     },1000)
                 }
                 else {
@@ -137,11 +137,11 @@ export default {
 <style lang="stylus" scoped>
 .AddressView
     min-height 100vh
-    background-color #ffffff
+    background-color #fef6d7
     .content
         padding 25px 24px 128px
         box-sizing border-box
-        background-color #ffffff
+        background-color #fef6d7
         font-family 'SourceHanSansHWSC-Regular'
         .address-list   
             position relative

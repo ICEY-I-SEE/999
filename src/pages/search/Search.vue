@@ -2,7 +2,7 @@
   	<div class="Search">
 		<!-- 搜索框  -->
 		<div class="search">
-			<i  class="iconfont icon-fanhui" @click="jumpTo()"></i>
+			<i  class="iconfont icon-fanhui" style="color:#b3b3b3;" @click="jumpTo()"></i>
 			<form class="searchForm">
 				<i class="iconfont icon-sousuo"></i>
 				<input
@@ -46,7 +46,7 @@
 					<div v-for="(item,key) in history" class="list-item" :key="key" @click="checkedKeywords(item.keywords)">{{item.keywords}}</div>
 				</div>
 			</div>
-<div style="border:0.5px solid #E0E0E0;"></div>
+			<!-- <div style="border:0.5px solid #E0E0E0;"></div> -->
 			<!-- 热搜 -->
 			<div class="search-item">
 				<h3>热搜</h3>
@@ -75,8 +75,9 @@
 						<div class="main">
 							<h3>{{item.goods_name}}</h3>
 							<div class="price">
-								<p class="discount-price">￥{{item.price}}</p>
-								<p class="original-price">原价:{{item.original_price}}</p>
+								<p class="original-price apostrophe">{{item.desc}}</p>
+								<p class="discount-price">￥{{item.price}}<img class="cart" src="/static/images/home/cart.png" /></p>
+								<!-- <p class="original-price">原价:{{item.original_price}}</p> -->
 							</div>
 						</div>
 					</router-link>
@@ -143,7 +144,7 @@ export default {
 				else if(res.data.status == 999){
 					this.$store.commit('del_token'); //清除token
 					setTimeout(()=>{
-						this.$router.push('/Login')
+						this.$router.push('/Home')
 					},1000)
 				}
 				else{
@@ -167,7 +168,7 @@ export default {
 					this.$toast(res.data.msg)
 					this.$store.commit('del_token'); //清除token
 					setTimeout(()=>{
-						this.$router.push('/Login')
+						this.$router.push('/Home')
 					},1000)
 				}
 				else{
@@ -212,7 +213,7 @@ export default {
 .Search
 	width 100%
 	min-height 100vh
-	background-color: #eee;
+	background-color: #fef6d7;
 	.no-data
 		margin:150px 20px 20px
 		text-align center
@@ -264,7 +265,7 @@ export default {
 			width 100px
 			height 60px
 			display inline-block
-			background #DB9BF5
+			background linear-gradient(to right,#e63100, #d90000)
 			color #ffffff
 			font-size 24px
 			border-radius 5px
@@ -314,25 +315,28 @@ export default {
 				border-radius: 50px;
 
 	.hot-wrap
-		padding 0 .25rem
+		padding 0 32px
 		box-sizing border-box
 		.hot-list
 			display flex
 			flex-wrap wrap
 			.single-item
-				width 48%
-				height 494px
+				margin-bottom 20px
+				width 100%
+				height 190px
 				background-color #fff
 				border-radius 8px
 				overflow hidden
-				margin 0 20px 20px 0
-				padding 10px
+				padding 16px 65px
 				box-sizing border-box
 				&:nth-child(2n)
 					margin-right 0
 				.img-wrap
-					width 320px
-					height 320px
+					float left
+					margin-right 45px
+					width 200px
+					height 160px
+					border-radius 10px
 					overflow hidden
 					img 
 						max-width 100%
@@ -342,7 +346,7 @@ export default {
 					h3
 						font-size 22px
 						color #151515
-						height 64px
+						height 40px
 						-webkit-box-orient vertical
 						-webkit-line-clamp 2
 						display -webkit-box
@@ -350,12 +354,19 @@ export default {
 						text-overflow ellipsis
 					.price
 						.discount-price
+							margin-top 5px
 							font-size 30px
 							color #ed0d0d
 							line-height 50px
+							.cart 
+								float right
+								margin-top 10px
+								width 30px
+								height 30px
 						.original-price
 							font-size 24px
 							color #a1a1a1
+							height 68px
 	
 
 </style>

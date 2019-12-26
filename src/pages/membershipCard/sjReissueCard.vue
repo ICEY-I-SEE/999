@@ -77,7 +77,7 @@ export default {
                 else if(res.data.status == 999){
                     that.$store.commit('del_token'); //清除token
                      setTimeout(()=>{
-                        this.$router.push('/Login')
+                        this.$router.push('/Home')
                     },1000)
                 }else{
                     that.$toast(res.data.msg)
@@ -123,7 +123,7 @@ export default {
                 else if(res.data.status == 999){
                     that.$store.commit('del_token'); //清除token
                    return setTimeout(() => {
-                        this.$router.push('/Login')
+                        this.$router.push('/Home')
                     }, 2000);
                 }else{
                     that.$toast(res.data.msg)

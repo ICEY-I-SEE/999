@@ -112,7 +112,7 @@ export default {
                 }
                 else if(res.data.status == 999){
                     that.$store.commit('del_token'); //清除token
-                    that.$router.push('/Login')
+                    that.$router.push('/Home')
                 }
                 else{
                     that.$toast(info.msg)
@@ -139,7 +139,7 @@ export default {
         //         else if(res.data.status == 999){
         //             that.$store.commit('del_token'); //清除token
         //             setTimeout(()=>{
-        //                 this.$router.push('/Login')
+        //                 this.$router.push('/Home')
         //             },1000)
         //         }else{
         //             that.$toast(res.data.msg)
@@ -188,7 +188,7 @@ export default {
                 else if(res.data.status == 999){
                     that.$store.commit('del_token'); //清除token
                      setTimeout(()=>{
-                        this.$router.push('/Login')
+                        this.$router.push('/Home')
                     },100)
                 }else{
                     that.$toast(res.data.msg)

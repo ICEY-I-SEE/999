@@ -96,7 +96,7 @@ export default {
                     that.$store.commit('hideLoading');
 					that.$store.commit('del_token'); //清除token
 					setTimeout(()=>{
-						that.$router.push('/Login')
+						that.$router.push('/Home')
 					},1000)
 				}
 				else{

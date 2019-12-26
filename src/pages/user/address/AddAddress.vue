@@ -41,6 +41,7 @@
                 <div class="label">设置默认地址</div>
                 <van-switch
                     v-model="checked"
+                    active-color="#d90000"
                     size="24px"
                 />
             </div>
@@ -179,7 +180,7 @@ export default {
 <style lang="stylus" scoped>
 .addAddress
     min-height 100vh
-    background-color #ffffff
+    background-color #fef6d7
     .content
         padding 20px 24px 0
         box-sizing border-box 
@@ -210,7 +211,7 @@ export default {
                         height 56px
                         line-height 56px
                         text-align left 
-                        background #fff
+                        background #fef6d7
                         color #151515
                         border none
                         outline none
@@ -277,7 +278,7 @@ export default {
             box-sizing border-box  
             box-shadow 1px 1px 8px #ccc
             .label
-                width 145px
+                width 180px
                 font-size 24px
                 color #151515
                 margin-right 25px  

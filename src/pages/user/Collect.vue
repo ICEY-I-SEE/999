@@ -178,7 +178,8 @@ export default {
             font-size:30px
         .collect-wrap
             width:100%
-            min-height:100%
+            min-height:100vh
+            background linear-gradient(#f6de8d, #fef6d7)
             color:#151515
         .collect-wrap /deep/ .nodata-wrap .-info-img
                 width 160px !important
@@ -267,8 +268,8 @@ export default {
 <style lang="stylus">
     .collect-wrap
         .van-checkbox__icon--checked .van-icon
-            background-color #e359c2
-            border-color #e052c7
+            background-color #d90000
+            border-color #d90000
         .van-checkbox__icon
             margin 0 5px 0 0    
 </style>

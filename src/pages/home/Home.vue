@@ -2,10 +2,23 @@
 	<div class="Home">
 		<div class="top-wrap">
 			<div class="banner-wrap">
-				<div class="w-Header">
+				<div class="seach">
+	                <img class="logo" slot="action" src="/static/images/public/logo.png" alt="">
+					<form action="/" >
+						<van-search
+							shape='round'
+							background='linear-gradient(90deg,#f9ebad,#efd984)'
+							v-model="value"
+							placeholder="请输入搜索关键词"
+							@click="sstd"
+						>
+						</van-search>
+					</form>
+				</div>
+				<!-- <div class="w-Header">
                     <img class="w-log" src="/static/images/home/new/w_logo.png" />
-                </div>
-				<p class="rrl-url">www.rrling.com</p>
+                </div> -->
+				<!-- <p class="rrl-url">www.rrling.com</p> -->
 				<div class="banner">
 					<swiper :options="swiperOptionBanner">
 						<swiper-slide v-for="(item,index) in bannerData" :key="index">
@@ -36,48 +49,52 @@
 					</li>
 				</ul>
 			</div> -->
-
-			<span class="-title-msg1 margin-left-m">双十一特惠</span>
+			<div class="video-box">
+				<video-player class="video-player vjs-custom-skin" ref="videoPlayer" :playsinline="playsinline"  :options="playerOptions"></video-player>
+			</div>
+			<!-- <span class="-title-msg1 margin-left-m">双十一特惠</span> -->
 
 			<div class="even11">
-				<img class="even11-img" src="/static/images/home/evens.gif" alt="">
-				<div @click="handelEven" class="click-div"></div>
-				<div class="evenCont"  v-if="shuanggoods.goods != undefined && shuanggoods.goods.length > 0">
-					<img class="wares-img" :src="shuanggoods.goods[0].img" alt="" @click="toDetail(shuanggoods.goods[0].goods_id)">
+				<!-- <img class="even11-img" src="/static/images/home/evens.gif" alt=""> -->
+				<!-- <div @click="handelEven" class="click-div"></div> -->
+				<div class="evenCont"  v-if="shuanggoods != undefined && shuanggoods.length > 0">
+					<!-- <img class="wares-img" :src="shuanggoods[0].img" alt="" @click="toDetail(shuanggoods[0].goods_id)"> -->
 					<div class="wares">
-						<div class="wares-item"  @click="toDetail(shuanggoods.goods[1].goods_id)">
-							<img :src="shuanggoods.goods[1].img" alt="" class="wares-item-img" />
+						<div class="wares-item"  @click="toDetail(shuanggoods[0].goods_id)">
+							<img :src="shuanggoods[0].img" alt="" class="wares-item-img" />
 							<div class="wares-item-text">
-								<p class="bold publicEllipsis">{{shuanggoods.goods[1].goods_name}}</p>
-								<p class="desc bold">限时抢购{{shuanggoods.goods[1].rush_num}}件</p>
+								<p class="bold publicEllipsis">{{shuanggoods[0].goods_name}}</p>
+								<!-- <p class="desc bold">限时抢购{{shuanggoods[0].rush_num}}件</p> -->
 								<p class="jg">
-									<span class="price">￥{{shuanggoods.goods[1].price}}</span>
-									<!-- <span class="y-price desc">￥{{shuanggoods.goods[2].original_price}}</span> -->
+									<span class="price">￥{{shuanggoods[0].price}}</span>
+									<img class="cart" src="/static/images/home/cart.png" />
+									<!-- <span class="y-price desc">￥{{shuanggoods[2].original_price}}</span> -->
 								</p>
 							</div>
 						</div>
-						<div class="wares-item"  @click="toDetail(shuanggoods.goods[2].goods_id)">
-							<img :src="shuanggoods.goods[2].img" alt="" class="wares-item-img" />
+						<div class="wares-item"  @click="toDetail(shuanggoods[1].goods_id)">
+							<img :src="shuanggoods[1].img" alt="" class="wares-item-img" />
 							<div class="wares-item-text">
-								<p class="bold publicEllipsis">{{shuanggoods.goods[2].goods_name}}</p>
-								<p class="desc bold">限时抢购{{shuanggoods.goods[2].rush_num}}件</p>
+								<p class="bold publicEllipsis">{{shuanggoods[1].goods_name}}</p>
+								<!-- <p class="desc bold">限时抢购{{shuanggoods[1].rush_num}}件</p> -->
 								<p class="jg">
-									<span class="price">￥{{shuanggoods.goods[2].price}}</span>
-									<!-- <span class="y-price desc">￥{{shuanggoods.goods[2].original_price}}</span> -->
+									<span class="price">￥{{shuanggoods[1].price}}</span>
+									<img class="cart" src="/static/images/home/cart.png" />
+									<!-- <span class="y-price desc">￥{{shuanggoods[2].original_price}}</span> -->
 								</p>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-
+			<div class="ListTltle">主打产品</div>
 			<!--会员卡 -->
-			<router-link :to="'/membershipCard?id='+1" tag="div" class="-item-vip-card">
+			<!-- <router-link :to="'/membershipCard?id='+1" tag="div" class="-item-vip-card">
 				<div class="vip-card"><img src="/static/images/home/new/vip_card.gif" /></div>
 				<img class="click-jr" src="/static/images/home/new/click-jr.gif" alt="">
-			</router-link>
+			</router-link> -->
 
-			<div class="collar">
+			<!-- <div class="collar">
 				<div @click="more" class="more"></div>
 				<div  class="collarList">
 					<swiper :options="swiperEveryday">
@@ -94,14 +111,32 @@
 						<swiper-slide></swiper-slide>
 					</swiper>
 				</div>
-			</div>
+			</div> -->
 
 
-			<div class="-item-vip-card2">
+			<!-- <div class="-item-vip-card2">
 				<img src="/static/images/home/new/h_1.gif" />
-			</div>
+			</div> -->
 
-			<span class="-title-msg1 margin-left-m">口碑推荐</span>
+			<!-- <span class="-title-msg1 margin-left-m">口碑推荐</span> -->
+
+			<div class="shopList">
+				<div class="shopList-ltem" v-for="(item,index) in retail_goods" :key="index" @click="toDetail(item.goods_id)">
+					<div class="ltem-img">
+						<img :src="item.img" alt="">
+					</div>
+					<div class="ltem-info">
+						<h3 class="ltem-name">{{item.goods_name}}</h3>
+						<p class="ltem-desc publicEllipsis">{{item.desc}}</p>
+						<p class="ltem-price" :class="!item.vip_money?'price-top':''">￥{{item.price}} <img class="cart" src="/static/images/home/cart.png" /></p>
+						<p v-if="item.vip_money">会员折扣价 <span class="ltem-price">￥{{item.vip_money}}</span></p>
+					</div>
+				</div>
+			</div>
+			
+			<div class="noData">
+				我们是有底线的
+			</div>
 
 			<div class="opinions" v-if="dapai_goods.banner">
 				<img class="opinions-img" :src="dapai_goods.banner.img" @click="handelSpecial(dapai_goods.banner.cat_id)" />
@@ -235,11 +270,11 @@
 		<van-overlay :show="isTips" :z-index="100" />
 		<div class="tips" v-show="isTips">
 			<div class="tips-cont">
-				<p class="notice">日日领公告</p>
-				<p>亲爱的日日领用户，欢迎进入<span class="akey">日日领会员制商城。</span></p>
-				<p>日日领，致力于成为中国人自己的会员制商城。尽可能以最低的价格为会员提供一切高品质的商品，为您实现消费降级，品质升级。</p>
+				<p class="notice">玖酒久公告</p>
+				<p>亲爱的玖酒久用户，欢迎进入<span class="akey">玖酒久会员制商城。</span></p>
+				<p>玖酒久，致力于成为中国人自己的会员制商城。尽可能以最低的价格为会员提供一切高品质的商品，为您实现消费降级，品质升级。</p>
 				<p>本商城的普通用户可以在<span class="akey">【每日一领 免费专区】</span>体验领取一次会员免费商品，但无法购买商城会员价商品。成为会员后即可持续享受商城会员全网最低价，同时可在<span class="akey">【每日一领】</span>专区每天任意领取一款会员免费商品，更有无数大牌好物惊爆价为会员准备。</p>
-				<p><span class="akey">日日领会员制商城</span>目前为邀请制，只有通过会员之间分享的二维码才能注册登录。当您成为日日领VIP会员后，您可在<span class="akey">【个人中心】</span>【点击】<span class="akey">【我要分享】</span>获取您的会员<span class="akey">专属二维码</span>，将二维码分享给新用户，即可帮他完成注册登录。</p>
+				<p><span class="akey">玖酒久会员制商城</span>目前为邀请制，只有通过会员之间分享的二维码才能注册登录。当您成为玖酒久VIP会员后，您可在<span class="akey">【个人中心】</span>【点击】<span class="akey">【我要分享】</span>获取您的会员<span class="akey">专属二维码</span>，将二维码分享给新用户，即可帮他完成注册登录。</p>
 			</div>
 			<button @click="handelTips">确定</button>
 		</div>
@@ -247,7 +282,7 @@
 		<div class="tips free" v-show="!isTips && is_vip_free_read == 0">
 			<div class="tips-wrap">
 				<div class="wrap-cont">
-					<p>亲爱的日日领用户，恭喜您收到一张会员<span class="akey">7天体验卡</span>，您已自动成为本商城的<span class="akey">VIP会员</span>，开始您的会员惊喜之旅吧~</p>
+					<p>亲爱的玖酒久用户，恭喜您收到一张会员<span class="akey">7天体验卡</span>，您已自动成为本商城的<span class="akey">VIP会员</span>，开始您的会员惊喜之旅吧~</p>
 				</div>
 				<div class="free-btn">
 					<button class="lj" @click="buyCard">了解会员</button>
@@ -290,7 +325,7 @@
 		<div class="wechat_pack" v-show="isFollow">
 			<div class="wrap">
 				<div class="cont">
-					<div class="cont_tit">日日领会员制商城</div>
+					<div class="cont_tit">玖酒久会员制商城</div>
 					<div class='cont_images'>
 						<div class="code_img"><img src="/static/images/public/wechat.png" alt=""></div>
 						<div class="sm">扫码关注公众号</div>
@@ -310,8 +345,8 @@ import {jumpTo} from '../../../static/js/public';
 import {mapState} from 'vuex';
 import TopHeader from "@/pages/common/header/TopHeaderOld";
 import { Dialog, Toast } from 'vant';
-import 'swiper/dist/css/swiper.css'
-import { swiper, swiperSlide } from 'vue-awesome-swiper'
+import 'swiper/dist/css/swiper.css';
+import { swiper, swiperSlide } from 'vue-awesome-swiper';
 export default {
 	name: "home",
 	// computed:{
@@ -323,7 +358,7 @@ export default {
 		Navigate,
 		TopHeader,
 		swiper,
-    	swiperSlide
+		swiperSlide
 	},
 	data() {
 		return {
@@ -347,8 +382,8 @@ export default {
 				},
 				coverflowEffect: {
 					rotate: 10,
-					stretch: 0,
-					depth:-100,
+					stretch: -10,
+					depth: 100,
 					modifier: 1,
 					slideShadows : false
 				},
@@ -390,13 +425,76 @@ export default {
 			number:0,
 
 			pwd:'',
+			value:'',
 			read:'',
-			is_vip_free_read:''
+			retail_goods:'',
+			playerOptions: {
+				playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
+				autoplay: false, //如果true,浏览器准备好时开始回放。
+				muted: false, // 默认情况下将会消除任何音频。
+				loop: false, // 导致视频一结束就重新开始。
+				preload: 'auto', // 建议浏览器在<video>加载元素后是否应该开始下载视频数据。auto浏览器选择最佳行为,立即开始加载视频（如果浏览器支持）
+                language: 'zh-CN',
+                aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
+                fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
+                sources: [{
+                    type: "video/mp4",
+                    src: "" //视频url地址
+                }],
+                // poster: "https://upload-images.jianshu.io/upload_images/13623636-cab46acab161d686.png?imageMogr2/auto-orient/strip|imageView2/2/w/542/format/webp", //你的封面地址
+                // width: document.documentElement.clientWidth,
+                notSupportedMessage: '此视频暂无法播放，请稍后再试', //允许覆盖Video.js无法播放媒体源时显示的默认信息。
+                controlBar: {
+                    timeDivider: true,
+                    durationDisplay: true,
+                    remainingTimeDisplay: false,
+                    fullscreenToggle: true  //全屏按钮
+                }
+            }
 		};
 	},
 	created(){
 		// this.$store.commit('showLoading')//加载loading
-		this.requestData();
+		let T = localStorage.getItem('time');
+		if(parseInt(new Date().getTime()/1000) > Number(T)+36000){
+			localStorage.removeItem('time');
+			this.$store.commit('del_token');
+		}
+		if(!this.$store.getters.optuser.Authorization){
+			let code = this.getCode('code');
+        	let user_id = this.getCode('user_id');
+			if(code){
+				let url = 'weixin/get_openid'
+					this.$axios.post(url,{
+						'code':code,
+						'user_id':user_id?user_id:'0'
+					})
+				.then((res)=>{
+					let _that = this;
+					if(res.data.status==200){
+						_that.$store.commit('del_token');
+						localStorage.setItem('time',parseInt(new Date().getTime()/1000))
+						var tokens = res.data.data.token
+						_that.$store.commit('set_token',{Authorization: tokens})  //保存token
+						_that.requestData(tokens);
+						return;
+					}else{
+						console.log('----+++++---')                    
+						console.log(res.data)
+						console.log(res.data.status)
+						console.log('----+++++---')
+						this.$toast(res.data.msg)
+					}
+				})
+				.catch((error) => {
+					console.log('请求错误:'+ error)
+				}) 
+			}else{
+				this.getIsWxClient();
+			}
+		}else{
+			this.requestData();
+		}
 
 		var _this = this;
 		this.pwd = this.$route.query.is_pwd;
@@ -404,41 +502,40 @@ export default {
 		let is_vip_free_read = this.$route.query.is_vip_free_read;
 		this.is_vip_free_read = is_vip_free_read;
 		if(Number(this.read) == 0){
-			this.isTips=true
+			this.isTips=false
 		}
-
 	},
 	activated(){
-		if(sessionStorage.getItem('homeScroll')){
-			document.documentElement.scrollTop = sessionStorage.getItem('homeScroll')
-			sessionStorage.removeItem('homeScroll')
-		}
-		let warrant = this.$store.getters.isWx;
-		if(warrant == 0){
-			var ua = navigator.userAgent.toLowerCase();
-			if(ua.match(/MicroMessenger/i) == "micromessenger"){
-				if (window.location.href.indexOf("code") == 0 ||window.location.href.indexOf("code") <= 0) {
-						this.$axios({
-						method: "get",
-						url: "user/GetOpenid?token="+this.token+'&is_pwd='+this.pwd+'&is_reads='+this.read+'&is_vip_free_read='+this.is_vip_free_read
-					}).then(res => {
-						var url = res.data.data;
-						window.location.href = url;
-					});
-				}else{
-					// 存在code 执行
-					// getQueryString用来截取code的值
-					var code = this.getQueryString("code");
-					this.$axios({
-						method: "get",
-						url: "user/get_code?code=" + code + '&token='+this.token
-					}).then(res => {
-						console.log('angeng 248')
-						this.$store.commit('upd_wx')
-					});
-				}
-			}
-		}
+		// if(sessionStorage.getItem('homeScroll')){
+		// 	document.documentElement.scrollTop = sessionStorage.getItem('homeScroll')
+		// 	sessionStorage.removeItem('homeScroll')
+		// }
+		// let warrant = this.$store.getters.isWx;
+		// if(warrant == 0){
+		// 	var ua = navigator.userAgent.toLowerCase();
+		// 	if(ua.match(/MicroMessenger/i) == "micromessenger"){
+		// 		if (window.location.href.indexOf("code") == 0 ||window.location.href.indexOf("code") <= 0) {
+		// 				this.$axios({
+		// 				method: "get",
+		// 				url: "user/GetOpenid?token="+this.token+'&is_pwd='+this.pwd+'&is_reads='+this.read+'&is_vip_free_read='+this.is_vip_free_read
+		// 			}).then(res => {
+		// 				var url = res.data.data;
+		// 				window.location.href = url;
+		// 			});
+		// 		}else{
+		// 			// 存在code 执行
+		// 			// getQueryString用来截取code的值
+		// 			var code = this.getQueryString("code");
+		// 			this.$axios({
+		// 				method: "get",
+		// 				url: "user/get_code?code=" + code + '&token='+this.token
+		// 			}).then(res => {
+		// 				console.log('angeng 248')
+		// 				this.$store.commit('upd_wx')
+		// 			});
+		// 		}
+		// 	}
+		// }
 	},
 	computed:{
 		or_l(){
@@ -447,12 +544,56 @@ export default {
 				content:this.orderList[this.number].content,
 				goods_id:this.orderList[this.number].goods_id
 			}
-		}
+		},
+		playsinline(){
+			var ua = navigator.userAgent.toLocaleLowerCase();
+			//x5内核
+			if (ua.match(/tencenttraveler/) != null || ua.match(/qqbrowse/) != null) {
+				return false
+			}else{
+				//ios端
+				return true				
+			}
+		},
+
 	},
 	methods: {
-
+		/**
+         * 判断是否是微信环境
+         */
+        getIsWxClient () {
+            var ua = navigator.userAgent.toLowerCase(),
+                that = this;
+            let user_id = this.getCode('user_id');
+            if (ua.match(/MicroMessenger/i) == "micromessenger") {
+                that.$axios.post('weixin/info_code',{
+                    'user_id':user_id?user_id:'0'
+                })
+                .then((res)=>{
+                    var list=res.data;
+                    console.log(list)
+                    if(list.status==200){
+                        window.location.href = list.data;
+                    }else{
+                        that.$toast(list.msg)
+                    }
+                })
+                .catch((error) => {
+                    alert('请求错误:'+ error)
+                }) 
+            }
+            return false;
+        },
+        getCode (name) {
+            var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return decodeURIComponent(r[2]); return null;
+        },
 		handelScroll(){
 			
+		},
+		sstd(){
+			this.$router.push({path:'/Search'})
 		},
 		handelSpecial(id){
 			sessionStorage.setItem('homeScroll',document.documentElement.scrollTop)
@@ -463,6 +604,7 @@ export default {
 			}
 		},
 		handelEven(){
+			return false;
 			sessionStorage.setItem('homeScroll',document.documentElement.scrollTop)
 			this.$router.push('/special/Special')
 		},
@@ -533,7 +675,7 @@ export default {
                 else if(res.data.status == 999){
                     that.$store.commit('del_token'); //清除token
                     setTimeout(()=>{
-                        this.$router.push('/Login')
+                        this.$router.push('/Home')
                     },1000)
                 }else{
                     that.$toast(res.data.msg)
@@ -563,27 +705,31 @@ export default {
 		/**
 		 * 请求数据
 		 */
-		requestData(){
+		requestData(tokens){
             let url = 'index/index';
-            this.$axios.post(url)
+            this.$axios.post(url,{
+				'token':this.token||tokens
+			})
             .then( (res) => {
                 if(res.data.status === 200){
 					var info =Object.freeze(res.data.data);
 					
 					this.bannerData =info.banners;
-					this.levelData =info.level_list;
-					this.goods=info.goods;
-					this.goodsFree =info.goods_free;
-					this.hotGoods =info.hot_goods;
-					this.newsData =info.announce;
-					this.freeGoods =info.free_goods;
-					this.shippingGoods=info.shiping_goods;
-					this.jiaju_goods=info.jiaju_goods;
-					this.dapai_goods=info.dapai_goods;
-					this.mianmo_goods=info.mianmo_goods;
-					this.riyonggoods=info.riyonggoods;
-					this.shuanggoods = info.shuanggoods;
-					this.wazi_goods = info.wazi_goods;
+					// this.levelData =info.level_list;
+					// this.goods=info.goods;
+					// this.goodsFree =info.goods_free;
+					// this.hotGoods =info.hot_goods;
+					// this.newsData =info.announce;
+					// this.freeGoods =info.free_goods;
+					// this.shippingGoods=info.shiping_goods;
+					// this.jiaju_goods=info.jiaju_goods;
+					// this.dapai_goods=info.dapai_goods;
+					// this.mianmo_goods=info.mianmo_goods;
+					// this.riyonggoods=info.riyonggoods;
+					this.playerOptions.sources[0].src = info.video;
+					this.shuanggoods = info.vip_goods;
+					this.retail_goods = info.retail_goods;
+					// this.wazi_goods = info.wazi_goods;
 					this.orderList = info.result;
 					this.$store.commit('hideLoading');
 
@@ -591,9 +737,21 @@ export default {
 				}
 				else if(res.data.status == 999){
 					this.$store.commit('del_token'); //清除token
-					setTimeout(()=>{
-						this.$router.push('/Login')
-					},1000)
+					var ua = navigator.userAgent.toLowerCase();
+					if (ua.match(/MicroMessenger/i) == "micromessenger") {
+			            let user_id = this.getCode('user_id');
+						setTimeout(()=>{
+							if(user_id){
+								this.$router.push('/Home?user_id='+user_id)
+							}else{
+								this.$router.push('/Home')
+							}
+						},1000)
+					}else{
+						setTimeout(()=>{
+							this.$router.push('/Home')
+						},1000)
+					}
 				}
 				else{
 					this.$toast(res.data.msg)
@@ -746,17 +904,17 @@ export default {
 		font-size 26px
 		margin 40px auto 0 auto
 .Home
-	background #efe6fc
+	background #fef6d7
 	font-family 'PangMenZhengDao'
 	position relative
 	.clickWechat
 		width:30px;
-		background:linear-gradient(90deg,rgba(225,83,201,1) 0%,rgba(244,115,179,1) 100%);
+		background:linear-gradient(90deg,#d90000 0%,#e63100 100%);
 		border-radius:40px 0 0 40px;
 		position fixed
 		top 60%
 		right 0
-		z-index 999
+		z-index 20
 		text-align center
 		color #fff
 		padding 20px 10px
@@ -784,7 +942,7 @@ export default {
 			.cont
 				width 100%
 				height 100%
-				background: linear-gradient(90deg, #e153c9 0%, #f473b3 100%);
+				background: linear-gradient(90deg, #d90000 0%, #e63100 100%);
 				border-radius 40px
 				position relative
 				color #fff
@@ -813,6 +971,9 @@ export default {
 					background-size 100%
 					margin 20px auto
 					position relative
+					display flex
+					justify-content center
+					align-items center
 					img
 						width 100%
 						height 100%
@@ -822,7 +983,7 @@ export default {
 						right 0
 						bottom 0
 	.order
-		position absolute
+		position fixed
 		left 24px
 		top 200px
 		width 500px
@@ -830,9 +991,11 @@ export default {
 		display flex
 		align-items center
 		border-radius 60px
-		background-image: linear-gradient(270deg, #fc8cfa 0%, #a281ed 47%, #737cf6 68%, #4377ff 100%), linear-gradient(0deg, #fc8cfa 0%, #a281ed 47%, #737cf6 68%, #4377ff 100%);
+		background-image: linear-gradient(90deg,#d90000,#e63100);
+		// background-image: linear-gradient(270deg, #fc8cfa 0%, #a281ed 47%, #737cf6 68%, #4377ff 100%), linear-gradient(0deg, #fc8cfa 0%, #a281ed 47%, #737cf6 68%, #4377ff 100%);
 		color #fff
 		opacity: 0
+		z-index 20	
 		.order_img
 			border-radius 50%
 			width 60px
@@ -861,8 +1024,20 @@ export default {
 		.banner-wrap
 			width 100%
 			height 100%
-			background url('/static/images/home/hon_bg.png') no-repeat
-			background-size 100% 100%
+			background linear-gradient(90deg, #f9ebac, #f4d77d);
+			// background url('/static/images/home/hon_bg.png') no-repeat
+			// background-size 100% 100%
+			.seach
+				margin 0 32px 10px
+				display flex
+				justify-content space-between
+				align-items center
+				.logo
+					width 50px
+				form
+					width 624px
+					&>>> .van-search
+						padding-right 0
 			.w-Header
 				// background none
 				// color #fff
@@ -872,8 +1047,8 @@ export default {
 				// font-size 32px
 				// letter-spacing 6px
 				.w-log
-					width 64px
-					height 96px
+					width 150px
+					height 150px
 					margin auto
 			.rrl-url
 				color #fff
@@ -894,11 +1069,26 @@ export default {
 				.swiper-img
 					border-radius: 10px;
 					width: 100%;
+					height 350px;
 			.banner-link
 				display block
 	
 	.specify-cont-inner
-		margin-top 150px
+		margin-top 140px
+		.video-player
+			margin 50px auto
+			height 100%
+		.video-player /deep/ .video-js.vjs-fluid, .video-js.vjs-16-9, .video-js.vjs-4-3
+			height 100%
+		.video-player /deep/ .video-js .vjs-big-play-button
+			// opacity 0
+			top 50%
+			left 50%
+			width 90px
+			height 90px
+			line-height 80px
+			border-radius 50%
+			margin -45px 0 0 -45px
 		.specify-shop-wrap
 			margin 24px 24px 0
 			background #fff
@@ -956,64 +1146,117 @@ export default {
 	.margin-left-m
 		margin-left 24px
 	.even11
-		margin-top -80px
+		margin-top -100px
 		width 100%
 		position relative
-		height 940px
-		overflow hidden
-		.click-div
-			height 520px
-			position absolute
-			top 80px
-			left 24px
-			right 24px
-			z-index 2
-		.even11-img
-			width 1400px
-			position absolute
-			left -320px
-			top 10px
+		height 	450px
+		// overflow hidden
+		// .click-div
+		// 	height 520px
+		// 	position absolute
+		// 	top 80px
+		// 	left 24px
+		// 	right 24px
+		// 	z-index 2
+		// .even11-img
+		// 	width 1400px
+		// 	position absolute
+		// 	left -320px
+		// 	top 10px
 		.evenCont
 			position absolute
-			left 102px
-			top 620px
-			width 550px
-			height 250px
+			left 32px
+			top 100px
+			width 690px
+			height 350px
 			display flex
-			.wares-img
+			padding 96px 65px 0
+			box-sizing border-box
+			border-radius 20px
+			box-shadow 0 10px 10px #e7cb76
+			background linear-gradient(#f9ebad,#f4d67b)
+			&::before
 				display block
+				content '礼包套装'
+				position absolute
+				top 20px
+				left 0
+				width 140px
+				height 50px
+				line-height 50px
+				color #fff
+				text-align center
+				box-shadow 0 3px 10px #e63100
+				border-top-right-radius 10px
+				border-bottom-right-radius 10px
+				background #e63100
+			.wares-img
+				display none
 				width 48%
 				height 100%
 				margin-right 4%
 				border-radius 24px
 			.wares
-				width 48%
+				width 100%
+				display flex
+				justify-content space-between
+				align-items flex-start
 				.wares-item
-					height 49%
-					display flex
-					&:nth-child(even)
-						margin-top 2%
+					width 238px
+					height 100%
+					box-sizing border-box
+					// &:nth-child(even)
+					// 	margin-top 2%
 					.wares-item-img
 						display block
-						height 100%
+						width 238px
+						height 162px
 						border-radius 12px
 					.wares-item-text
-						width 150px
-						padding 10px 4px
+						padding 5px 4px
 						font-size 16px
-						display flex
-						flex-wrap wrap
-						align-content space-between
 						.jg
-							width 150px
 							display flex
 							align-items center
+							justify-content space-between
 						.price
 							font-size 20px
 							margin-right 10px
-							color #F55692
+							color #d90000
+						.cart 
+							width 30px
+							height 30px
 						.y-price
 							text-decoration line-through
+	.ListTltle
+		position relative
+		margin-top 50px
+		width 100%
+		height 80px
+		line-height 80px
+		font-weight bold
+		text-align center
+		background #fff
+		&::before
+			display block
+			content ''
+			position absolute
+			top 25px
+			left 270px
+			width 60px
+			height 30px
+			background url('/static/images/home/title-left.png') no-repeat
+			background-size cover
+		&::after
+			display block
+			content ''
+			position absolute
+			top 25px
+			right 270px
+			width 60px
+			height 30px
+			background url('/static/images/home/title-right.png') no-repeat 110%
+			background-size cover
 	.nav-wrap
 		display -webkit-box
 		display -moz-flex
@@ -1131,6 +1374,70 @@ export default {
 		img 
 			width 100%
 			max-height 100%
+	.shopList
+		margin 30px 32px
+		.shopList-ltem
+			display flex
+			margin-bottom 25px
+			width 688px
+			height 200px
+			padding 20px 0 20px 65px 
+			background linear-gradient(#f9ebad,#f4d67b)
+			box-shadow 0 5px 10px #e7cb76
+			border-radius 10px
+			box-sizing border-box
+			justify-content flex-start
+			.ltem-img
+				margin-right 20px
+				width 200px
+				height 156px
+				overflow hidden
+				border-radius 10px
+				img 
+					width 100%
+					height 100%
+			.ltem-info
+				width 360px
+			.ltem-desc
+				margin-bottom 10px
+				height 40px
+			.ltem-price
+				color #d90000
+				.cart
+					float right
+					margin-top 5px
+					margin-right 40px
+					width 30px
+					height 30px
+			.price-top
+				margin-top 40px
+	.noData
+		position relative
+		text-align center
+		line-height 60px
+		color #959288
+		&::before
+			content ""
+			display block
+			position absolute
+			top 0
+			bottom 0
+			left 220px
+			margin auto
+			width 45px
+			height 1px
+			background #959288
+		&::after
+			content ""
+			display block
+			position absolute
+			top 0
+			bottom 0
+			right 220px
+			margin auto
+			width 45px
+			height 1px
+			background #959288
 	.opinions
 		padding 0 24px
 		border-radius 24px
@@ -1345,8 +1652,7 @@ export default {
 	.foot-height136
 		width 100%
 		height 136px
-		background #d1c6f7
-		background-image: linear-gradient(#e7e4fc 0%, #d1c6f7 100%);  
+		background #fef6d7
 	.banner-ss
 		border 1px solid #fff
 

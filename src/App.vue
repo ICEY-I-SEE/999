@@ -9,6 +9,7 @@
 	<router-view v-if="!$route.meta.keepAlive"></router-view>
 	<!-- loading 加载 -->
 	<Loading v-if="isLoading"></Loading>
+	<!-- <div v-if="!wx" class="wx"><img src="/static/images/public/wx.jpg" alt=""></div> -->
   </div>
 </template>
 
@@ -33,8 +34,19 @@ export default {
             }) 
 		}
 	},
+	data(){
+		return{
+			wx:''
+		}
+	},
 	mounted(){
 		localStorage.setItem('ios_url',global.location.pathname)
+		var ua = window.navigator.userAgent.toLowerCase();
+		if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+			this.wx = true;
+		} else {
+			this.wx = false;
+		}
 	},
 	methods: {
 	},
@@ -50,4 +62,20 @@ body,html,#app
 	.height-88
 		width 100%
 		height 88px
+	.wx
+		position fixed
+		top 0
+		left 0
+		width 100vw
+		height 100vh
+		background #fff
+		z-index 100
+		img 
+			position absolute
+			top 0
+			left 0
+			right 0
+			bottom 0
+			margin auto
+			width 100%		
 </style>

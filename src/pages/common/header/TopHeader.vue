@@ -1,6 +1,6 @@
 <template>
     <van-sticky>
-        <div class="TopHeader">
+        <div class="TopHeader" :style="{'background':customColor,'border-bottom':customBorder}">
             <div class="backBtn" @click="backAction">
                 <slot name="backBtn"></slot>
             </div>
@@ -23,9 +23,17 @@ export default {
             type:String,
             default:'标题'
         },
+        'customColor':{
+            type:String,
+            default:'#ffffff'
+        },
         'customFixed':{
             type:Boolean,
             default:false
+        },
+        'customBorder':{
+            type:String,
+            default:'0.02rem solid #e6e6e6'
         }
     },
     data(){

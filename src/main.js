@@ -28,6 +28,11 @@ import 'babel-polyfill'
 import VueLazyload from 'vue-lazyload'
 Vue.use(VueLazyload)
 
+// 视频组件
+import VueVideoPlayer from 'vue-video-player'
+import 'video.js/dist/video-js.css'
+
+Vue.use(VueVideoPlayer)
 
 // 引入axios请求数据
 import axios from "./axios/request";

@@ -10,7 +10,7 @@
  			<li>
  				<router-link to="/Category">
  					<i class="category-icon"></i>
- 					<span class="text">分类</span>
+ 					<span class="text">商品分类</span>
  				</router-link>
  			</li>
  			<li>
@@ -51,9 +51,9 @@
 	position fixed
 	left 0
 	bottom 0
-	box-shadow: 0px 8px 45px 1px rgba(166, 130, 237, 0.5);
-	border-top-left-radius 20px
-	border-top-right-radius 20px
+	// box-shadow: 0px 8px 45px 1px rgba(166, 130, 237, 0.5);
+	// border-top-left-radius 20px
+	// border-top-right-radius 20px
 	ul
 		display flex
 		height inherit
@@ -74,16 +74,16 @@
 					display block
 				.home-icon
 					background url(/static/images/public/nav1s.png) no-repeat center center
-					background-size 42px 40px
+					background-size auto 40px
 				.category-icon
 					background url(/static/images/public/nav2s.png) no-repeat center center
-					background-size 40px 40px
+					background-size auto 40px
 				.cart-icon
 					background url(/static/images/public/nav3s.png) no-repeat center center
-					background-size 36px 40px
+					background-size auto 40px
 				.user-icon
 					background url(/static/images/public/nav4s.png) no-repeat center center
-					background-size 38px 40px
+					background-size auto 40px
 				span
 					color #898989
 					font-size 16px
@@ -91,18 +91,18 @@
 			.router-link
 				.home-icon
 					background url(/static/images/public/nav1.png) no-repeat center center
-					background-size 49px 46px
+					background-size auto 40px
 				.category-icon
 					background url(/static/images/public/nav2.png) no-repeat center center
-					background-size 46px 46px
+					background-size auto 40px
 				.cart-icon
 					background url(/static/images/public/nav3.png) no-repeat center center
-					background-size 42px 46px
+					background-size auto 40px
 				.user-icon
 					background url(/static/images/public/nav4.png) no-repeat center center
-					background-size 43px 46px
+					background-size auto 40px
 				span
-					color #898989
+					color #a6894f
 </style>
 
 

@@ -68,7 +68,7 @@
                     </div>
                     <!-- <span class="original-price">原价￥{{this.goodsData.original_price}}</span> -->
                 </div>
-                <p class="price" v-if="goodsData.vip_money">会员折扣价 <span class="discount-price">￥{{goodsData.vip_money}}</span></p>
+                <p class="price" v-if="Number(goodsData.vip_money)>0">会员折扣价 <span class="discount-price">￥{{goodsData.vip_money}}</span></p>
                 <!-- 商品名称 -->
                 <div class="goodsName">
                     <h1 style="font-weight:500;">{{this.goodsData.goods_name}}</h1>
@@ -171,7 +171,7 @@
                     <div class="slide-fade-title">
                         <img class="-fade-title-img" :src="checkSKU.img" />
                         <div>
-                            <p class="-title-msg-1">￥{{goodsData.vip_money?goodsData.vip_money:checkSKU.price}}</p>
+                            <p class="-title-msg-1">￥{{Number(goodsData.vip_money)>0?goodsData.vip_money:checkSKU.price}}</p>
                             <p class="-title-msg-2">库存{{checkSKU.stock}}件</p>
                             <p class="-title-msg-3">选择 <span>{{checkSKU.sku_attr}}</span></p>
                         </div>
@@ -1200,14 +1200,21 @@ a
             height:100%
             overflow:hidden
             .list-img-wrap
-                width 100%
-                height:100%
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate3d(-50%,-50%,0);
+                max-width: 100%;
+                max-height: 100%;
+                line-height: 100%;
+                visibility: middle;
     .content
         // padding-bottom 128px
         box-sizing border-box
         font-family: 'SourceHanSansHWSC-Regular'
         .-desc
             padding 20px
+            font-size 0
             p 
                 img
                     width 100%

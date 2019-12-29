@@ -622,14 +622,14 @@ export default {
                         display: flex;
                         margin-bottom 18px
                     .img-wrap
-                        width 156px
-                        height 156px
+                        width 200px
+                        height 150px
                         text-align center
                         margin-right 20px
                         border-radius 25px
                         img 
-                            width 156px
-                            height 156px
+                            width 100%
+                            height 100%
                             display block
                             border-radius 25px
                     .text

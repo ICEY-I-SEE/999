@@ -34,7 +34,7 @@
                                 <i class="puls iconfont icon-jia" @click="addNumber(key,item.sku_id)" ></i>
                             </span>
                         </div>
-                        <p v-if="item.vip_money" class="vip_money">会员折扣价 <span>￥{{item.vip_money}}</span></p>
+                        <p v-if="Number(item.vip_money)>0" class="vip_money">会员折扣价 <span>￥{{item.vip_money}}</span></p>
                     </div>
 
                 </div>
@@ -398,8 +398,8 @@ export default {
                 box-sizing border-box
                 .-list-img
                     margin-right 40px !important 
-                    width 201px
-                    height 176px
+                    width 220px
+                    height 180px
                     margin 0 10px 0 4px
                     img
                         width 100%

@@ -62,7 +62,7 @@
                             <div class="-d-msg2">
                                 <span>￥ {{item.goods_price}}</span>
                                 <span>x {{item.goods_num}}</span>
-                                <p v-if="item.vip_money">会员折扣价 ￥{{item.vip_money}}</p>
+                                <p v-if="Number(item.vip_money)>0">会员折扣价 ￥{{item.vip_money}}</p>
                             </div>
                         </div>
                     </router-link>
@@ -420,7 +420,7 @@ export default {
                 subtotal =0,
                 totalPrice
             for(var i in goods_res){
-                price = new Number(price) + new Number(goods_res[i].vip_money?goods_res[i].vip_money:goods_res[i].goods_price)
+                price = new Number(price) + new Number(goods_res[i].vip_money>0?goods_res[i].vip_money:goods_res[i].goods_price)
                  console.log(price)
             }
             totalPrice = price + new Number(_that.shipping_price) - this.couponsPrice
@@ -549,14 +549,15 @@ export default {
                     margin-bottom: 15px
                     .-list-img
                         width: 220px
-                        height: 200px
+                        height: 165px
+                        border-radius 10px
                     .-detial-
                         margin-left:25px
                         .-d-msg
                             font-size 28px
-                            font-weight:bold
-                            margin-bottom :30px
-                            oeverflow:hidden
+                            font-weight bold
+                            margin-bottom 30px
+                            overflow hidden
                         .-d-msg2
                             font-size 24px
                         

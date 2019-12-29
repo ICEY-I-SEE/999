@@ -8,6 +8,14 @@
         <div class="content">
             <div class="input-amount"><input type="number" readonly="readonly" @touchstart.stop="show1=true" v-model="money" oninput="if(value.length > 10)value = value.slice(0, 12)"  placeholder="请输入充值金额" @input="changAmount($event)" /></div>
             <div class="tips">充值金额只能为100的倍数,不输入默认为100元。</div>
+            <div class="pay-tips">
+                <van-checkbox v-model="checked" checked-color="#d90000">
+                    我已同意
+                    <router-link class="link" to="/Pay/PayText">
+                        《玖酒久商城平台快捷支付服务协议》
+                    </router-link>
+                </van-checkbox>
+            </div>
             <div class="amount-list">
                 <div class="amount-item" 
                     v-for="(item,index) in amountList"
@@ -20,7 +28,7 @@
             </div>
             <div class="foot-info">
                 <div class="recharge-amount">{{rechargeAmount | formatMoney}}元</div>
-                <div class="confirm-btn ts-style" @click="linkToPay()">确定付款</div>
+                <div class="confirm-btn ts-style" :class="!checked?'no':''" @click="linkToPay()">确定付款</div>
             </div>
         </div>
 
@@ -52,6 +60,7 @@ export default {
             money:'',
             isClick:false,
             show1: false,
+            checked: false
         }
     },
     created(){
@@ -78,6 +87,7 @@ export default {
             if(this.isClick){
                 return
             }
+            if(!this.checked)return this.$toast('请勾选支付协议!')
             this.isClick=true;
             let url = 'pay/recharge_pay',
                 that = this;
@@ -210,6 +220,11 @@ export default {
                 font-size 28px
         .tips
             color #d90000
+        .pay-tips
+            margin 15px 0
+            .link
+                color #ff2d10
+                text-decoration underline
         .amount-list
             display flex
             flex-wrap wrap
@@ -258,4 +273,7 @@ export default {
                 letter-spacing 4px
                 border-radius 40px
                 margin 34px auto
+        .no
+            pointer-events none
+            background #ccc
 </style>

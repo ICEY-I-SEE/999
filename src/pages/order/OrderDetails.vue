@@ -236,8 +236,8 @@ export default {
                     &:last-child
                         border-bottom none
                     .img-wrap
-                        width 140px
-                        height 140px
+                        width 200px
+                        height 150px
                         overflow hidden
                         display flex
                         justify-content center

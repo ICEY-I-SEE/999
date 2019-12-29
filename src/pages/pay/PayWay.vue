@@ -27,7 +27,7 @@
                 <van-checkbox v-model="checked" checked-color="#d90000">
                     我已同意
                     <router-link class="link" to="/Pay/PayText">
-                        《XXXX》
+                        《玖酒久商城平台快捷支付服务协议》
                     </router-link>
                 </van-checkbox>
             </div>
@@ -710,7 +710,7 @@ export default {
             .pay-price-red
                 color #ff2d10
         .pay-tips
-            margin 10px 24px
+            margin 10px auto
             .link
                 color #ff2d10
                 text-decoration underline

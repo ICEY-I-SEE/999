@@ -128,8 +128,8 @@
 					<div class="ltem-info">
 						<h3 class="ltem-name">{{item.goods_name}}</h3>
 						<p class="ltem-desc publicEllipsis">{{item.desc}}</p>
-						<p class="ltem-price" :class="!item.vip_money?'price-top':''">￥{{item.price}} <img class="cart" src="/static/images/home/cart.png" /></p>
-						<p v-if="item.vip_money">会员折扣价 <span class="ltem-price">￥{{item.vip_money}}</span></p>
+						<p class="ltem-price" :class="!Number(item.vip_money)>0?'price-top':''">￥{{item.price}} <img class="cart" src="/static/images/home/cart.png" /></p>
+						<p v-if="Number(item.vip_money)>0">会员折扣价 <span class="ltem-price">￥{{item.vip_money}}</span></p>
 					</div>
 				</div>
 			</div>
@@ -455,47 +455,47 @@ export default {
 	},
 	created(){
 		// this.$store.commit('showLoading')//加载loading
-		let T = localStorage.getItem('time');
-		if(parseInt(new Date().getTime()/1000) > Number(T)+36000){
-			localStorage.removeItem('time');
-			this.$store.commit('del_token');
-		}
-		if(!this.$store.getters.optuser.Authorization){
-			let code = this.getCode('code');
-        	let user_id = this.getCode('user_id');
-			if(code){
-				let url = 'weixin/get_openid'
-					this.$axios.post(url,{
-						'code':code,
-						'user_id':user_id?user_id:'0'
-					})
-				.then((res)=>{
-					let _that = this;
-					if(res.data.status==200){
-						_that.$store.commit('del_token');
-						localStorage.setItem('time',parseInt(new Date().getTime()/1000))
-						var tokens = res.data.data.token
-						_that.$store.commit('set_token',{Authorization: tokens})  //保存token
-						_that.requestData(tokens);
-						return;
-					}else{
-						console.log('----+++++---')                    
-						console.log(res.data)
-						console.log(res.data.status)
-						console.log('----+++++---')
-						this.$toast(res.data.msg)
-					}
-				})
-				.catch((error) => {
-					console.log('请求错误:'+ error)
-				}) 
-			}else{
-				this.getIsWxClient();
-			}
-		}else{
-			this.requestData();
-		}
-
+		// let T = localStorage.getItem('time');
+		// if(parseInt(new Date().getTime()/1000) > Number(T)+36000){
+		// 	localStorage.removeItem('time');
+		// 	this.$store.commit('del_token');
+		// }
+		// if(!this.$store.getters.optuser.Authorization){
+		// 	let code = this.getCode('code');
+        // 	let user_id = this.getCode('user_id');
+		// 	if(code){
+		// 		let url = 'weixin/get_openid'
+		// 			this.$axios.post(url,{
+		// 				'code':code,
+		// 				'user_id':user_id?user_id:'0'
+		// 			})
+		// 		.then((res)=>{
+		// 			let _that = this;
+		// 			if(res.data.status==200){
+		// 				_that.$store.commit('del_token');
+		// 				localStorage.setItem('time',parseInt(new Date().getTime()/1000))
+		// 				var tokens = res.data.data.token
+		// 				_that.$store.commit('set_token',{Authorization: tokens})  //保存token
+		// 				_that.requestData(tokens);
+		// 				return;
+		// 			}else{
+		// 				console.log('----+++++---')                    
+		// 				console.log(res.data)
+		// 				console.log(res.data.status)
+		// 				console.log('----+++++---')
+		// 				this.$toast(res.data.msg)
+		// 			}
+		// 		})
+		// 		.catch((error) => {
+		// 			console.log('请求错误:'+ error)
+		// 		}) 
+		// 	}else{
+		// 		this.getIsWxClient();
+		// 	}
+		// }else{
+		// 	this.requestData();
+		// }
+		window.vm = this;
 		var _this = this;
 		this.pwd = this.$route.query.is_pwd;
 		this.read = this.$route.query.is_reads;
@@ -536,6 +536,47 @@ export default {
 		// 		}
 		// 	}
 		// }
+		let T = localStorage.getItem('time');
+		if(parseInt(new Date().getTime()/1000) > Number(T)+36000){
+			localStorage.removeItem('time');
+			this.$store.commit('del_token');
+		}
+		if(!this.$store.getters.optuser.Authorization){
+			let code = this.getCode('code');
+        	let user_id = this.getCode('user_id');
+			if(code){
+				let url = 'weixin/get_openid'
+					this.$axios.post(url,{
+						'code':code,
+						'user_id':user_id?user_id:'0'
+					})
+				.then((res)=>{
+					let _that = this;
+					if(res.data.status==200){
+						_that.$store.commit('del_token');
+						localStorage.setItem('time',parseInt(new Date().getTime()/1000))
+						var tokens = res.data.data.token
+						_that.token = tokens
+						_that.$store.commit('set_token',{Authorization: tokens})  //保存token
+						_that.requestData(tokens);
+						return;
+					}else{
+						console.log('----+++++---')                    
+						console.log(res.data)
+						console.log(res.data.status)
+						console.log('----+++++---')
+						this.$toast(res.data.msg)
+					}
+				})
+				.catch((error) => {
+					console.log('请求错误:'+ error)
+				}) 
+			}else{
+				this.getIsWxClient();
+			}
+		}else{
+			this.requestData();
+		}
 	},
 	computed:{
 		or_l(){
@@ -706,7 +747,7 @@ export default {
 		 * 请求数据
 		 */
 		requestData(tokens){
-            let url = 'index/index';
+			let url = 'index/index';
             this.$axios.post(url,{
 				'token':this.token||tokens
 			})
@@ -1069,12 +1110,11 @@ export default {
 				.swiper-img
 					border-radius: 10px;
 					width: 100%;
-					height 350px;
 			.banner-link
 				display block
 	
 	.specify-cont-inner
-		margin-top 140px
+		margin-top 6.5vh
 		.video-player
 			margin 50px auto
 			height 100%
@@ -1168,7 +1208,7 @@ export default {
 			left 32px
 			top 100px
 			width 690px
-			height 350px
+			height 370px
 			display flex
 			padding 96px 65px 0
 			box-sizing border-box
@@ -1202,15 +1242,15 @@ export default {
 				justify-content space-between
 				align-items flex-start
 				.wares-item
-					width 238px
+					width 240px
 					height 100%
 					box-sizing border-box
 					// &:nth-child(even)
 					// 	margin-top 2%
 					.wares-item-img
 						display block
-						width 238px
-						height 162px
+						width 240px
+						height 180px
 						border-radius 12px
 					.wares-item-text
 						padding 5px 4px
@@ -1390,7 +1430,7 @@ export default {
 			.ltem-img
 				margin-right 20px
 				width 200px
-				height 156px
+				height 150px
 				overflow hidden
 				border-radius 10px
 				img 

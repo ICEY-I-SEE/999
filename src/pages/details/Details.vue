@@ -207,6 +207,10 @@
             </transition>
         </div>
        
+        <!-- 返回顶部 -->
+        <div class="back" v-if="scroll>=400" @click="backTop">
+            <img src="/static/images/details/back.png">
+        </div>
         <!-- 底部菜单 -->
         
         <div class="bottom-bar">
@@ -317,8 +321,8 @@ export default {
             goodsName:'',
             uid:'',
             more:false,
-            opacity:''
-
+            opacity:'',
+            scroll:''
         }
     },
     created(){
@@ -378,6 +382,10 @@ export default {
         handleScroll(){
             this.more = false;
             this.opacity = window.scrollY * 0.0032;
+            this.scroll = window.scrollY;
+        },
+        backTop(){
+            window.scrollTo(0,0)
         },
         more_jump(url){
             this.$router.push(`/${url}`);
@@ -1565,7 +1573,20 @@ a
         width 100%
         height 180px
         align-items  center
-    
+    .back
+        position fixed
+        bottom 10vh
+        right 20px
+        width 80px
+        height 80px
+        text-align center
+        border-radius 50%
+        padding 10px 0
+        border 2px solid #ccc
+        box-sizing border-box
+        background #fff
+        img
+            width 60px
     .bottom-bar
         border-top 1px solid #eee
         position fixed

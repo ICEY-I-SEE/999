@@ -144,7 +144,7 @@
                                 <van-checkbox v-model="checkedYh" :checked-color="'#df51c8'"></van-checkbox>
                             </li>
                         </ul>
-                        <img src="/static/images/pay/yh.gif" alt="" srcset="" class="yh">
+                        <img src="/static/images/pay/yh.jpg" alt="" srcset="" class="yh">
                         <!-- <div class="goods-price">
                             <span>共 {{count}} 件</span>
                             <span>共计：</span>
@@ -420,7 +420,7 @@ export default {
                 subtotal =0,
                 totalPrice
             for(var i in goods_res){
-                price = new Number(price) + new Number(goods_res[i].vip_money>0?goods_res[i].vip_money:goods_res[i].goods_price)
+                price = new Number(price) + new Number(goods_res[i].vip_money>0?goods_res[i].vip_money:goods_res[i].subtotal_price)
                  console.log(price)
             }
             totalPrice = price + new Number(_that.shipping_price) - this.couponsPrice

@@ -354,6 +354,8 @@ export default {
     .cart
         width 100%
         height 100vh
+        overflow-y scroll
+        padding-bottom 40px
         background #fef6d7
         color #151515
         .rightBtn
@@ -398,12 +400,16 @@ export default {
                 box-sizing border-box
                 .-list-img
                     margin-right 40px !important 
-                    width 220px
+                    width 240px
                     height 180px
                     margin 0 10px 0 4px
+                    overflow hidden
+                    display flex
+                    align-items center
+                    justify-content center
                     img
-                        width 100%
-                        height 100%
+                        max-width 100%
+                        max-height 100%
                         border-radius 10px
                 .goods-info
                     width:445px

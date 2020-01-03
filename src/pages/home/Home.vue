@@ -20,7 +20,7 @@
                 </div> -->
 				<!-- <p class="rrl-url">www.rrling.com</p> -->
 				<div class="banner">
-					<swiper :options="swiperOptionBanner">
+					<swiper :options="swiperOptionBanner" v-if="bannerData.length">
 						<swiper-slide v-for="(item,index) in bannerData" :key="index">
 							<img :src="item.picture" class="swiper-img" />
 						</swiper-slide>
@@ -126,7 +126,7 @@
 						<img :src="item.img" alt="">
 					</div>
 					<div class="ltem-info">
-						<h3 class="ltem-name">{{item.goods_name}}</h3>
+						<h3 class="ltem-name publicEllipsis">{{item.goods_name}}</h3>
 						<p class="ltem-desc publicEllipsis">{{item.desc}}</p>
 						<p class="ltem-price" :class="!Number(item.vip_money)>0?'price-top':''">￥{{item.price}} <img class="cart" src="/static/images/home/cart.png" /></p>
 						<p v-if="Number(item.vip_money)>0">会员折扣价 <span class="ltem-price">￥{{item.vip_money}}</span></p>
@@ -134,6 +134,11 @@
 				</div>
 			</div>
 			
+			<div class="fiex" v-if="fiex">
+				<div class="fiex-off" @click="fiex=false"></div>
+				<img src="/static/images/public/fiex.png">
+			</div>
+
 			<div class="noData">
 				我们是有底线的
 			</div>
@@ -271,10 +276,10 @@
 		<div class="tips" v-show="isTips">
 			<div class="tips-cont">
 				<p class="notice">玖酒久公告</p>
-				<p>亲爱的玖酒久用户，欢迎进入<span class="akey">玖酒久会员制商城。</span></p>
-				<p>玖酒久，致力于成为中国人自己的会员制商城。尽可能以最低的价格为会员提供一切高品质的商品，为您实现消费降级，品质升级。</p>
+				<p>亲爱的玖酒久用户，欢迎进入<span class="akey">玖酒久商城。</span></p>
+				<p>玖酒久，致力于成为中国人自己的商城。尽可能以最低的价格为会员提供一切高品质的商品，为您实现消费降级，品质升级。</p>
 				<p>本商城的普通用户可以在<span class="akey">【每日一领 免费专区】</span>体验领取一次会员免费商品，但无法购买商城会员价商品。成为会员后即可持续享受商城会员全网最低价，同时可在<span class="akey">【每日一领】</span>专区每天任意领取一款会员免费商品，更有无数大牌好物惊爆价为会员准备。</p>
-				<p><span class="akey">玖酒久会员制商城</span>目前为邀请制，只有通过会员之间分享的二维码才能注册登录。当您成为玖酒久VIP会员后，您可在<span class="akey">【个人中心】</span>【点击】<span class="akey">【我要分享】</span>获取您的会员<span class="akey">专属二维码</span>，将二维码分享给新用户，即可帮他完成注册登录。</p>
+				<p><span class="akey">玖酒久商城</span>目前为邀请制，只有通过会员之间分享的二维码才能注册登录。当您成为玖酒久VIP会员后，您可在<span class="akey">【个人中心】</span>【点击】<span class="akey">【我要分享】</span>获取您的会员<span class="akey">专属二维码</span>，将二维码分享给新用户，即可帮他完成注册登录。</p>
 			</div>
 			<button @click="handelTips">确定</button>
 		</div>
@@ -325,7 +330,7 @@
 		<div class="wechat_pack" v-show="isFollow">
 			<div class="wrap">
 				<div class="cont">
-					<div class="cont_tit">玖酒久会员制商城</div>
+					<div class="cont_tit">玖酒久商城</div>
 					<div class='cont_images'>
 						<div class="code_img"><img src="/static/images/public/wechat.png" alt=""></div>
 						<div class="sm">扫码关注公众号</div>
@@ -375,7 +380,8 @@ export default {
 				effect: 'coverflow',
 				centeredSlides: true,
 				slidesPerView: 'auto',
-				spaceBetween:10,	
+				spaceBetween:10,
+				loop:true,	
 				autoplay: {
 					delay: 3000,//自动播放速度
 					disableOnInteraction: false//鼠标移上去时是否还继续播放
@@ -428,6 +434,7 @@ export default {
 			value:'',
 			read:'',
 			retail_goods:'',
+			fiex:true,
 			playerOptions: {
 				playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
 				autoplay: false, //如果true,浏览器准备好时开始回放。
@@ -495,6 +502,7 @@ export default {
 		// }else{
 		// 	this.requestData();
 		// }
+
 		window.vm = this;
 		var _this = this;
 		this.pwd = this.$route.query.is_pwd;
@@ -629,7 +637,7 @@ export default {
             var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
             var r = window.location.search.substr(1).match(reg);
             if (r != null) return decodeURIComponent(r[2]); return null;
-        },
+		},
 		handelScroll(){
 			
 		},
@@ -1024,9 +1032,9 @@ export default {
 						right 0
 						bottom 0
 	.order
-		position fixed
+		position absolute
 		left 24px
-		top 200px
+		top 25vh
 		width 500px
 		height 60px
 		display flex
@@ -1451,6 +1459,22 @@ export default {
 					height 30px
 			.price-top
 				margin-top 40px
+	.fiex
+		position fixed
+		top 0
+		left 0
+		width 100%
+		height 100%
+		background rgba(0,0,0,0.8)
+		z-index 100
+		.fiex-off
+			position absolute
+			top 235px
+			right 125px
+			width 50px
+			height 50px
+		img
+			width 100%
 	.noData
 		position relative
 		text-align center

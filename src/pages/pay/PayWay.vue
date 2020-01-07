@@ -540,7 +540,7 @@ export default {
                             },2000)
                         }else{
                             setTimeout(() => {                   
-                                this.$router.push('/Order/OrderDetails?order_id=' + res.data.data.order_id)
+                                this.$router.push('/Order/OrderDetails?order_id=' + res.data.data.order_id+'&flag=1')
                             },2000)
                         }
                     }

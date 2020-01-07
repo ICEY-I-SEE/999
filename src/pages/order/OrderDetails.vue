@@ -127,7 +127,11 @@ export default {
     },
     methods:{
         JumpTo(){
-            this.$router.go(-1)
+            if(this.$route.query.flag){
+                this.$router.push('/Order?type=0')
+            }else{
+                this.$router.go(-1)
+            }
             // this.$router.push('/User')
         },
         requestData(){

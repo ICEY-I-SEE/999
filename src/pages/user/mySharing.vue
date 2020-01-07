@@ -21,13 +21,14 @@
                 </div>
                 <div class="mark_wrap">
                     <div class="mark">
-                        <div class="mark_img">
-                            <div class="title">实现富稀传奇酒自由，请你免费喝一年。</div>
+                        <div class="mark_img" v-if="ewmList.return_qr_code||siteList.qrcode">
+                            <div class="title">实现富稀传奇酒自由，请你免费喝。</div>
                             <img :src="ewmList.return_qr_code||siteList.qrcode"/>
                             <!-- 必须是id 和实例化的第一参数对应 -->
                             <!-- <div id="qrcode"></div> -->
                             <p class="touch">截图可保存二维码~~</p>
                         </div>
+                        <p v-else class="nodata">还未购买礼包</p>
                     </div>
                     
                 </div>
@@ -38,6 +39,7 @@
 </template>
 
 <script>
+    import { Dialog } from 'vant';
     import MyHeader from "@/pages/common/header/TopHeader"
     import QRCode from 'qrcodejs2'
     export default {
@@ -182,7 +184,6 @@
                     overflow hidden
                     img 
                         width 100%
-                        height 100%
                 .name 
                     position relative
                     float right 
@@ -250,5 +251,8 @@
                         bottom 2%  
                         width 100%
                         text-align center 
-                        left 0                           
+                        left 0     
+                    .nodata
+                        text-align center
+                        line-height 650px                
 </style>

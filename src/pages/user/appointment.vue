@@ -7,14 +7,14 @@
 		</TopHeader>
         <div class="package">
             <div class="package_item" @click="type=1" :class="type==1?'active':''">
-                999礼包:剩余<span>{{teamList.vip_999nums}}</span>次
+                富稀传奇一号礼包：剩余<span>{{teamList.vip_999nums}}</span>次
             </div>
             <div class="package_item" @click="type=2" :class="type==2?'active':''">
-                3999礼包:剩余<span>{{teamList.vip_3999nums}}</span>次
+                富稀传奇二号礼包：剩余<span>{{teamList.vip_3999nums}}</span>次
             </div>
         </div>
         <div class="introduce">
-            温馨提示：请申请兑换礼包时完整填写信息，未完整填写的兑换申请为无效申请。兑换申请一经提交，怒不接受更改。请在有效期内兑换使用，过期作废。
+            温馨提示：请申请兑换礼包时完整填写信息，未完整填写的兑换申请为无效申请。兑换申请一经提交，怒不接受更改。请在有效期内兑换使用，过期作废。填写预约宴席时间需提前20天。
         </div>
         <div class="timeBtn">
             <van-cell is-link @click="showDate = true">预约时间 <span style="float:right;">{{`${currentDate.getFullYear()}年${(currentDate.getMonth()+1)}月${currentDate.getDate()}日`}}</span></van-cell>

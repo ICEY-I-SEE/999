@@ -7,10 +7,10 @@
         <div class="content">
             <div class="notice-list">
                 <ul>
-                    <router-link :to="'/notice/NoticeDetails?item_id='+item.id" tag="li" v-for="(item,index) in NotList" :key="index">
+                    <a :href="item.urllink?item.urllink:'/notice/NoticeDetails?item_id='+item.id" tag="li" v-for="(item,index) in NotList" :key="index">
                         <h3 class="publicEllipsis"><img src="/static/images/user/notice.png"> {{item.title}}</h3>
                         <span class="date">{{item.create_time | formatDate}}</span>
-                    </router-link>
+                    </a>
                 </ul>
             </div>
         </div>
@@ -87,7 +87,7 @@ export default {
         font-family 'SourceHanSansHWSC-Regular'
         .notice-list
             ul
-                li
+                a
                     margin-bottom 20px
                     padding 10px 30px
                     font-size 28px

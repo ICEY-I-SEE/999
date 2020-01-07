@@ -14,7 +14,7 @@
                 <p v-if="item.type==2">状态:已使用</p>
                 <p v-if="item.type==3">状态:已过期</p>
                 <!-- <p>申请时间:2014-11-22</p> -->
-                <p>{{item.end_time | formatDate}}天后截止</p>
+                <!-- <p>{{item.end_time | formatDate}}天后截止</p> -->
             </div>
         </div>
     </div>
@@ -104,8 +104,9 @@
         align-items center
         justify-content space-between
         width 702px
-        height 200px
-        padding 20px
+        height 120px
+        padding 0 24px
+        font-size 30px
         box-sizing border-box
         border-radius 20px
         background #fff

@@ -49,9 +49,9 @@
 					</li>
 				</ul>
 			</div> -->
-			<div class="video-box">
+			<!-- <div class="video-box">
 				<video-player class="video-player vjs-custom-skin" ref="videoPlayer" :playsinline="playsinline"  :options="playerOptions"></video-player>
-			</div>
+			</div> -->
 			<!-- <span class="-title-msg1 margin-left-m">双十一特惠</span> -->
 
 			<div class="even11">
@@ -503,6 +503,8 @@ export default {
 		// 	this.requestData();
 		// }
 
+		window.addEventListener('scroll', this.throttle(this.scrollToTop))
+
 		window.vm = this;
 		var _this = this;
 		this.pwd = this.$route.query.is_pwd;
@@ -585,6 +587,7 @@ export default {
 		}else{
 			this.requestData();
 		}
+		this.page = 1;
 	},
 	computed:{
 		or_l(){
@@ -632,7 +635,49 @@ export default {
                 }) 
             }
             return false;
-        },
+		},
+		scrollToTop() {
+			var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+			var windowHeight = document.documentElement.clientHeight || document.body.clientHeight;
+			var scrollHeight = document.documentElement.scrollHeight||document.body.scrollHeight;
+			if(scrollTop+windowHeight>=scrollHeight-50){
+				let url = 'index/index';
+				this.$axios.post(url,{
+					'token':this.token||tokens,
+					'page':++this.page
+				})
+				.then( (res) => {
+					if(res.data.status === 200){
+						for(let i=0;i<res.data.data.retail_goods.data.length;i++){
+							this.retail_goods.push(res.data.data.retail_goods.data[i]);
+						}
+					}
+					else if(res.data.status == 999){
+						this.$store.commit('del_token'); //清除token
+						var ua = navigator.userAgent.toLowerCase();
+						setTimeout(()=>{
+							this.$router.push('/Home')
+						},1000)
+					}
+					else{
+						this.$toast(res.data.msg)
+					}
+				})
+				.catch((error) => {
+					alert('请求错误:'+ error)
+				})
+			} 
+		},
+		throttle(fn,interval = 300){
+			let timer = null;
+			return function(){
+				if(timer) return;
+				timer = setTimeout(()=>{
+					fn();
+					timer = null;
+				},interval);
+			}
+		},
         getCode (name) {
             var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
             var r = window.location.search.substr(1).match(reg);
@@ -777,7 +822,7 @@ export default {
 					// this.riyonggoods=info.riyonggoods;
 					this.playerOptions.sources[0].src = info.video;
 					this.shuanggoods = info.vip_goods;
-					this.retail_goods = info.retail_goods;
+					this.retail_goods = info.retail_goods.data;
 					// this.wazi_goods = info.wazi_goods;
 					this.orderList = info.result;
 					this.$store.commit('hideLoading');
@@ -837,7 +882,6 @@ export default {
 				}
 			})
 		},
-
 		/**
 		 * 路由跳转
 		 */
@@ -1225,19 +1269,30 @@ export default {
 			background linear-gradient(#f9ebad,#f4d67b)
 			&::before
 				display block
-				content '礼包套装'
+				content '你请客我送酒'
 				position absolute
 				top 20px
 				left 0
-				width 140px
+				right 0
+				margin auto
 				height 50px
 				line-height 50px
-				color #fff
+				font-size 36px
+				font-weight bold
+				letter-spacing 2px
 				text-align center
-				box-shadow 0 3px 10px #e63100
-				border-top-right-radius 10px
-				border-bottom-right-radius 10px
-				background #e63100
+			// &::after
+			// 	display block
+			// 	content ''
+			// 	position absolute
+			// 	top 9.5%
+			// 	left 0
+			// 	right 0
+			// 	margin auto
+			// 	width 300px
+			// 	height 50px
+			// 	background url(/static/images/home/evenCont_bg.png) no-repeat
+			// 	background-size contain
 			.wares-img
 				display none
 				width 48%

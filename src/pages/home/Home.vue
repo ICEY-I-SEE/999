@@ -135,7 +135,7 @@
 			</div>
 			
 			<div class="fiex" v-if="fiex">
-				<div class="fiex-off" @click="fiex=false"></div>
+				<div class="fiex-off" @click="fiex_off"></div>
 				<img src="/static/images/public/fiex.png">
 			</div>
 
@@ -434,7 +434,7 @@ export default {
 			value:'',
 			read:'',
 			retail_goods:'',
-			fiex:true,
+			fiex:localStorage.getItem('fiex')?localStorage.setItem('fiex','fiex'):true,
 			playerOptions: {
 				playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
 				autoplay: false, //如果true,浏览器准备好时开始回放。
@@ -682,6 +682,10 @@ export default {
             var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');
             var r = window.location.search.substr(1).match(reg);
             if (r != null) return decodeURIComponent(r[2]); return null;
+		},
+		fiex_off(){
+			this.fiex = false;
+			localStorage.setItem('fiex','fiex')
 		},
 		handelScroll(){
 			
